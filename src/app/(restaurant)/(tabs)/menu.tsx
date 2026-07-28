@@ -162,7 +162,7 @@ export default function MenuManagementScreen() {
             
             <View style={styles.modalActions}>
               <View style={{ flex: 1 }}>
-                <Button title={t('common.cancel')} onPress={() => setModalVisible(false)} variant="outline" />
+                <Button title={t('common.cancel')} onPress={() => setModalVisible(false)} variant="ghost" />
               </View>
               <View style={{ flex: 1 }}>
                 <Button title={t('common.save')} onPress={saveItem} />
