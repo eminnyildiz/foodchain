@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 20, fontWeight: '800' },
   scroll: { padding: 16, gap: 16 },
   mapContainer: { height: 220, position: 'relative' },
-  map: { ...StyleSheet.absoluteFill as any },
+  map: { width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 },
   mapOverlay: { position: 'absolute', top: 12, left: 12, backgroundColor: 'rgba(0,0,0,0.6)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
   mapOverlayText: { fontSize: 13, fontWeight: '700' },
   markerContainer: { alignItems: 'center', justifyContent: 'center' },
