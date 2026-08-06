@@ -4,7 +4,23 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+let MapView: any = null;
+let Marker: any = null;
+let PROVIDER_GOOGLE: any = null;
+if (Platform.OS === 'web') {
+  const WebMaps = require('@teovilla/react-native-web-maps');
+  MapView = WebMaps.default;
+  Marker = WebMaps.Marker;
+  // Initialize with env variable - it will be automatically injected on web
+  if (WebMaps.initMap && process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY) {
+    WebMaps.initMap(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY);
+  }
+} else {
+  const Maps = require('react-native-maps');
+  MapView = Maps.default;
+  Marker = Maps.Marker;
+  PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
+}
 import { useTheme } from '../../../hooks/useTheme';
 import { useCartStore } from '../../../store/cartStore';
 import { demoRestaurants } from '../../../data/restaurants';
@@ -105,29 +121,33 @@ export default function RestaurantDetailScreen() {
           />
           
           {/* Restaurant Location Map */}
-          <View style={styles.mapContainer}>
-            <MapView
-              style={styles.map}
-              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
-              initialRegion={{
-                latitude: restaurant.latitude || 41.0082,
-                longitude: restaurant.longitude || 28.9784,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }}
-              scrollEnabled={false}
-              zoomEnabled={false}
-            >
-              <Marker
-                coordinate={{
+          {MapView && (
+            <View style={styles.mapContainer}>
+              <MapView
+                style={styles.map}
+                provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+                initialRegion={{
                   latitude: restaurant.latitude || 41.0082,
                   longitude: restaurant.longitude || 28.9784,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
                 }}
-                title={restaurant.name}
-                description={restaurant.address}
-              />
-            </MapView>
-          </View>
+                scrollEnabled={false}
+                zoomEnabled={false}
+              >
+                {Marker && (
+                  <Marker
+                    coordinate={{
+                      latitude: restaurant.latitude || 41.0082,
+                      longitude: restaurant.longitude || 28.9784,
+                    }}
+                    title={restaurant.name}
+                    description={restaurant.address}
+                  />
+                )}
+              </MapView>
+            </View>
+          )}
         </View>
 
         {/* Menu Categories */}

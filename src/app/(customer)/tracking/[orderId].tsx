@@ -8,7 +8,22 @@ import { useOrderStore } from '../../../store/orderStore';
 import { demoOrders } from '../../../data/orders';
 import { formatPrice } from '../../../utils/formatters';
 import { OrderStatus } from '../../../types';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+let MapView: any = null;
+let Marker: any = null;
+let PROVIDER_GOOGLE: any = null;
+if (Platform.OS === 'web') {
+  const WebMaps = require('@teovilla/react-native-web-maps');
+  MapView = WebMaps.default;
+  Marker = WebMaps.Marker;
+  if (WebMaps.initMap && process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY) {
+    WebMaps.initMap(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY);
+  }
+} else {
+  const Maps = require('react-native-maps');
+  MapView = Maps.default;
+  Marker = Maps.Marker;
+  PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
+}
 
 const steps: { status: OrderStatus; icon: string; labelKey: string }[] = [
   { status: 'confirmed', icon: '✅', labelKey: 'orderStatus.confirmed' },
@@ -80,72 +95,78 @@ export default function TrackingScreen() {
 
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Google Maps */}
-        <View style={[styles.mapContainer, { borderRadius: theme.borderRadius.lg, overflow: 'hidden' }]}>
-          <MapView
-            style={styles.map}
-            provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
-            initialRegion={{
-              latitude: order.deliveryAddress.latitude || 41.0082,
-              longitude: order.deliveryAddress.longitude || 28.9784,
-              latitudeDelta: 0.02,
-              longitudeDelta: 0.02,
-            }}
-            scrollEnabled={false}
-            zoomEnabled={false}
-          >
-            {/* Restaurant marker */}
-            <Marker
-              coordinate={{
-                latitude: (order.deliveryAddress.latitude || 41.0082) + 0.005,
-                longitude: (order.deliveryAddress.longitude || 28.9784) - 0.003,
-              }}
-              title={order.restaurantName}
-              description={t('restaurant.restaurantInfo')}
-            >
-              <View style={styles.markerContainer}>
-                <Text style={{ fontSize: 22 }}>🏪</Text>
-              </View>
-            </Marker>
-            {/* Delivery address marker */}
-            <Marker
-              coordinate={{
+        {MapView && (
+          <View style={[styles.mapContainer, { borderRadius: theme.borderRadius.lg, overflow: 'hidden' }]}>
+            <MapView
+              style={styles.map}
+              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+              initialRegion={{
                 latitude: order.deliveryAddress.latitude || 41.0082,
                 longitude: order.deliveryAddress.longitude || 28.9784,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.02,
               }}
-              title={order.deliveryAddress.title}
-              description={order.deliveryAddress.address}
+              scrollEnabled={false}
+              zoomEnabled={false}
             >
-              <View style={styles.markerContainer}>
-                <Text style={{ fontSize: 22 }}>📍</Text>
-              </View>
-            </Marker>
-            {/* Courier marker (only when on the way) */}
-            {currentStatus === 'onTheWay' && (
-              <Marker
-                coordinate={{
-                  latitude: (order.deliveryAddress.latitude || 41.0082) + 0.002,
-                  longitude: (order.deliveryAddress.longitude || 28.9784) - 0.001,
-                }}
-                title={t('tracking.courierOnTheWay')}
-              >
-                <View style={styles.markerContainer}>
-                  <Text style={{ fontSize: 22 }}>🚴</Text>
-                </View>
-              </Marker>
-            )}
-          </MapView>
-          {/* Status overlay on map */}
-          <View style={styles.mapOverlay}>
-            <Text style={[styles.mapOverlayText, { color: '#fff' }]}>
-              {currentStatus === 'delivered' ? t('tracking.orderDelivered') : currentStatus === 'onTheWay' ? t('tracking.courierOnTheWay') : t('tracking.preparingOrder')}
-            </Text>
-          </View>
-          {currentStatus !== 'delivered' && (
-            <View style={[styles.etaBadge, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.full }]}>
-              <Text style={styles.etaText}>~{estimatedMin} {t('tracking.minutes')}</Text>
+              {/* Restaurant marker */}
+              {Marker && (
+                <Marker
+                  coordinate={{
+                    latitude: (order.deliveryAddress.latitude || 41.0082) + 0.005,
+                    longitude: (order.deliveryAddress.longitude || 28.9784) - 0.003,
+                  }}
+                  title={order.restaurantName}
+                  description={t('restaurant.restaurantInfo')}
+                >
+                  <View style={styles.markerContainer}>
+                    <Text style={{ fontSize: 22 }}>🏪</Text>
+                  </View>
+                </Marker>
+              )}
+              {/* Delivery address marker */}
+              {Marker && (
+                <Marker
+                  coordinate={{
+                    latitude: order.deliveryAddress.latitude || 41.0082,
+                    longitude: order.deliveryAddress.longitude || 28.9784,
+                  }}
+                  title={order.deliveryAddress.title}
+                  description={order.deliveryAddress.address}
+                >
+                  <View style={styles.markerContainer}>
+                    <Text style={{ fontSize: 22 }}>📍</Text>
+                  </View>
+                </Marker>
+              )}
+              {/* Courier marker (only when on the way) */}
+              {currentStatus === 'onTheWay' && Marker && (
+                <Marker
+                  coordinate={{
+                    latitude: (order.deliveryAddress.latitude || 41.0082) + 0.002,
+                    longitude: (order.deliveryAddress.longitude || 28.9784) - 0.001,
+                  }}
+                  title={t('tracking.courierOnTheWay')}
+                >
+                  <View style={styles.markerContainer}>
+                    <Text style={{ fontSize: 22 }}>🚴</Text>
+                  </View>
+                </Marker>
+              )}
+            </MapView>
+            {/* Status overlay on map */}
+            <View style={styles.mapOverlay}>
+              <Text style={[styles.mapOverlayText, { color: '#fff' }]}>
+                {currentStatus === 'delivered' ? t('tracking.orderDelivered') : currentStatus === 'onTheWay' ? t('tracking.courierOnTheWay') : t('tracking.preparingOrder')}
+              </Text>
             </View>
-          )}
-        </View>
+            {currentStatus !== 'delivered' && (
+              <View style={[styles.etaBadge, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.full }]}>
+                <Text style={styles.etaText}>~{estimatedMin} {t('tracking.minutes')}</Text>
+              </View>
+            )}
+          </View>
+        )}
 
         {/* Status Steps */}
         <View style={[styles.stepsCard, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
