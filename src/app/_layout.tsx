@@ -1,7 +1,6 @@
 import '../i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack, useRouter, useSegments } from 'expo-router';
-import Head from 'expo-router/head';
 import * as SplashScreen from 'expo-splash-screen';
 import { Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -62,11 +61,6 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {Platform.OS === 'web' && (
-        <Head>
-          <script async defer src={`https://maps.googleapis.com/maps/api/js?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&loading=async`} />
-        </Head>
-      )}
       <QueryClientProvider client={queryClient}>
         <RootLayoutNav />
       </QueryClientProvider>

@@ -7,11 +7,7 @@ import { Image } from 'expo-image';
 let MapView: any = null;
 let Marker: any = null;
 let PROVIDER_GOOGLE: any = null;
-if (Platform.OS === 'web') {
-  const WebMaps = require('@teovilla/react-native-web-maps');
-  MapView = WebMaps.default;
-  Marker = WebMaps.Marker;
-} else {
+if (Platform.OS !== 'web') {
   const Maps = require('react-native-maps');
   MapView = Maps.default;
   Marker = Maps.Marker;
@@ -117,10 +113,19 @@ export default function RestaurantDetailScreen() {
           />
           
           {/* Restaurant Location Map */}
-          {MapView && (
-            <View style={styles.mapContainer}>
+          <View style={styles.mapContainer}>
+            {Platform.OS === 'web' ? (
+              <iframe
+                width="100%"
+                height="100%"
+                style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${restaurant.latitude || 41.0082},${restaurant.longitude || 28.9784}`}
+              />
+            ) : MapView ? (
               <MapView
-                style={styles.map}
+                style={styles.map as any}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
                   latitude: restaurant.latitude || 41.0082,
@@ -142,8 +147,8 @@ export default function RestaurantDetailScreen() {
                   />
                 )}
               </MapView>
-            </View>
-          )}
+            ) : null}
+          </View>
         </View>
 
         {/* Menu Categories */}

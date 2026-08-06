@@ -11,11 +11,7 @@ import { OrderStatus } from '../../../types';
 let MapView: any = null;
 let Marker: any = null;
 let PROVIDER_GOOGLE: any = null;
-if (Platform.OS === 'web') {
-  const WebMaps = require('@teovilla/react-native-web-maps');
-  MapView = WebMaps.default;
-  Marker = WebMaps.Marker;
-} else {
+if (Platform.OS !== 'web') {
   const Maps = require('react-native-maps');
   MapView = Maps.default;
   Marker = Maps.Marker;
@@ -92,10 +88,23 @@ export default function TrackingScreen() {
 
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Google Maps */}
-        {MapView && (
-          <View style={[styles.mapContainer, { borderRadius: theme.borderRadius.lg, overflow: 'hidden' }]}>
+        <View style={[styles.mapContainer, { borderRadius: theme.borderRadius.lg, overflow: 'hidden' }]}>
+          {Platform.OS === 'web' ? (
+            <iframe
+              width="100%"
+              height="100%"
+              style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
+              loading="lazy"
+              allowFullScreen
+              src={
+                currentStatus === 'onTheWay'
+                  ? `https://www.google.com/maps/embed/v1/directions?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&origin=${(order.deliveryAddress.latitude || 41.0082) + 0.005},${(order.deliveryAddress.longitude || 28.9784) - 0.003}&destination=${order.deliveryAddress.latitude || 41.0082},${order.deliveryAddress.longitude || 28.9784}`
+                  : `https://www.google.com/maps/embed/v1/place?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${order.deliveryAddress.latitude || 41.0082},${order.deliveryAddress.longitude || 28.9784}`
+              }
+            />
+          ) : MapView ? (
             <MapView
-              style={styles.map}
+              style={styles.map as any}
               provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: order.deliveryAddress.latitude || 41.0082,
@@ -151,19 +160,19 @@ export default function TrackingScreen() {
                 </Marker>
               )}
             </MapView>
-            {/* Status overlay on map */}
-            <View style={styles.mapOverlay}>
-              <Text style={[styles.mapOverlayText, { color: '#fff' }]}>
-                {currentStatus === 'delivered' ? t('tracking.orderDelivered') : currentStatus === 'onTheWay' ? t('tracking.courierOnTheWay') : t('tracking.preparingOrder')}
-              </Text>
-            </View>
-            {currentStatus !== 'delivered' && (
-              <View style={[styles.etaBadge, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.full }]}>
-                <Text style={styles.etaText}>~{estimatedMin} {t('tracking.minutes')}</Text>
-              </View>
-            )}
+          ) : null}
+          {/* Status overlay on map */}
+          <View style={styles.mapOverlay}>
+            <Text style={[styles.mapOverlayText, { color: '#fff' }]}>
+              {currentStatus === 'delivered' ? t('tracking.orderDelivered') : currentStatus === 'onTheWay' ? t('tracking.courierOnTheWay') : t('tracking.preparingOrder')}
+            </Text>
           </View>
-        )}
+          {currentStatus !== 'delivered' && (
+            <View style={[styles.etaBadge, { backgroundColor: theme.colors.primary, borderRadius: theme.borderRadius.full }]}>
+              <Text style={styles.etaText}>~{estimatedMin} {t('tracking.minutes')}</Text>
+            </View>
+          )}
+        </View>
 
         {/* Status Steps */}
         <View style={[styles.stepsCard, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
