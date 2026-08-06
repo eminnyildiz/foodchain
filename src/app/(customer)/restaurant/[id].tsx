@@ -4,15 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
-let MapView: any = null;
-let Marker: any = null;
-let PROVIDER_GOOGLE: any = null;
-if (Platform.OS !== 'web') {
-  const Maps = require('react-native-maps');
-  MapView = Maps.default;
-  Marker = Maps.Marker;
-  PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
-}
+import AppMap, { MapMarkerProps } from '../../../components/Map';
 import { useTheme } from '../../../hooks/useTheme';
 import { useCartStore } from '../../../store/cartStore';
 import { demoRestaurants } from '../../../data/restaurants';
@@ -114,40 +106,16 @@ export default function RestaurantDetailScreen() {
           
           {/* Restaurant Location Map */}
           <View style={styles.mapContainer}>
-            {Platform.OS === 'web' ? (
-              <iframe
-                width="100%"
-                height="100%"
-                style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${restaurant.latitude || 41.0082},${restaurant.longitude || 28.9784}`}
-              />
-            ) : MapView ? (
-              <MapView
-                style={styles.map as any}
-                provider={PROVIDER_GOOGLE}
-                initialRegion={{
+            <AppMap
+              markers={[
+                {
                   latitude: restaurant.latitude || 41.0082,
                   longitude: restaurant.longitude || 28.9784,
-                  latitudeDelta: 0.01,
-                  longitudeDelta: 0.01,
-                }}
-                scrollEnabled={false}
-                zoomEnabled={false}
-              >
-                {Marker && (
-                  <Marker
-                    coordinate={{
-                      latitude: restaurant.latitude || 41.0082,
-                      longitude: restaurant.longitude || 28.9784,
-                    }}
-                    title={restaurant.name}
-                    description={restaurant.address}
-                  />
-                )}
-              </MapView>
-            ) : null}
+                  title: restaurant.name,
+                  description: restaurant.address,
+                },
+              ]}
+            />
           </View>
         </View>
 

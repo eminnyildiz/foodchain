@@ -8,15 +8,7 @@ import { useOrderStore } from '../../../store/orderStore';
 import { demoOrders } from '../../../data/orders';
 import { formatPrice } from '../../../utils/formatters';
 import { OrderStatus } from '../../../types';
-let MapView: any = null;
-let Marker: any = null;
-let PROVIDER_GOOGLE: any = null;
-if (Platform.OS !== 'web') {
-  const Maps = require('react-native-maps');
-  MapView = Maps.default;
-  Marker = Maps.Marker;
-  PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
-}
+import AppMap, { MapMarkerProps } from '../../../components/Map';
 
 const steps: { status: OrderStatus; icon: string; labelKey: string }[] = [
   { status: 'confirmed', icon: '✅', labelKey: 'orderStatus.confirmed' },
@@ -89,78 +81,34 @@ export default function TrackingScreen() {
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Google Maps */}
         <View style={[styles.mapContainer, { borderRadius: theme.borderRadius.lg, overflow: 'hidden' }]}>
-          {Platform.OS === 'web' ? (
-            <iframe
-              width="100%"
-              height="100%"
-              style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
-              loading="lazy"
-              allowFullScreen
-              src={
-                currentStatus === 'onTheWay'
-                  ? `https://www.google.com/maps/embed/v1/directions?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&origin=${(order.deliveryAddress.latitude || 41.0082) + 0.005},${(order.deliveryAddress.longitude || 28.9784) - 0.003}&destination=${order.deliveryAddress.latitude || 41.0082},${order.deliveryAddress.longitude || 28.9784}`
-                  : `https://www.google.com/maps/embed/v1/place?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${order.deliveryAddress.latitude || 41.0082},${order.deliveryAddress.longitude || 28.9784}`
-              }
-            />
-          ) : MapView ? (
-            <MapView
-              style={styles.map as any}
-              provider={PROVIDER_GOOGLE}
-              initialRegion={{
+          <AppMap
+            markers={[
+              {
+                latitude: (order.deliveryAddress.latitude || 41.0082) + 0.005,
+                longitude: (order.deliveryAddress.longitude || 28.9784) - 0.003,
+                title: order.restaurantName,
+                description: t('restaurant.restaurantInfo'),
+                icon: <View style={styles.markerContainer}><Text style={{ fontSize: 22 }}>🏪</Text></View>,
+              },
+              {
                 latitude: order.deliveryAddress.latitude || 41.0082,
                 longitude: order.deliveryAddress.longitude || 28.9784,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.02,
-              }}
-              scrollEnabled={false}
-              zoomEnabled={false}
-            >
-              {/* Restaurant marker */}
-              {Marker && (
-                <Marker
-                  coordinate={{
-                    latitude: (order.deliveryAddress.latitude || 41.0082) + 0.005,
-                    longitude: (order.deliveryAddress.longitude || 28.9784) - 0.003,
-                  }}
-                  title={order.restaurantName}
-                  description={t('restaurant.restaurantInfo')}
-                >
-                  <View style={styles.markerContainer}>
-                    <Text style={{ fontSize: 22 }}>🏪</Text>
-                  </View>
-                </Marker>
-              )}
-              {/* Delivery address marker */}
-              {Marker && (
-                <Marker
-                  coordinate={{
-                    latitude: order.deliveryAddress.latitude || 41.0082,
-                    longitude: order.deliveryAddress.longitude || 28.9784,
-                  }}
-                  title={order.deliveryAddress.title}
-                  description={order.deliveryAddress.address}
-                >
-                  <View style={styles.markerContainer}>
-                    <Text style={{ fontSize: 22 }}>📍</Text>
-                  </View>
-                </Marker>
-              )}
-              {/* Courier marker (only when on the way) */}
-              {currentStatus === 'onTheWay' && Marker && (
-                <Marker
-                  coordinate={{
-                    latitude: (order.deliveryAddress.latitude || 41.0082) + 0.002,
-                    longitude: (order.deliveryAddress.longitude || 28.9784) - 0.001,
-                  }}
-                  title={t('tracking.courierOnTheWay')}
-                >
-                  <View style={styles.markerContainer}>
-                    <Text style={{ fontSize: 22 }}>🚴</Text>
-                  </View>
-                </Marker>
-              )}
-            </MapView>
-          ) : null}
+                title: order.deliveryAddress.title,
+                description: order.deliveryAddress.address,
+                icon: <View style={styles.markerContainer}><Text style={{ fontSize: 22 }}>📍</Text></View>,
+              },
+              ...(currentStatus === 'onTheWay'
+                ? [
+                    {
+                      latitude: (order.deliveryAddress.latitude || 41.0082) + 0.002,
+                      longitude: (order.deliveryAddress.longitude || 28.9784) - 0.001,
+                      title: t('tracking.courierOnTheWay'),
+                      icon: <View style={styles.markerContainer}><Text style={{ fontSize: 22 }}>🚴</Text></View>,
+                    },
+                  ]
+                : []),
+            ]}
+          />
           {/* Status overlay on map */}
           <View style={styles.mapOverlay}>
             <Text style={[styles.mapOverlayText, { color: '#fff' }]}>
