@@ -96,7 +96,7 @@ export default function TrackingScreen() {
           <View style={[styles.mapContainer, { borderRadius: theme.borderRadius.lg, overflow: 'hidden' }]}>
             <MapView
               style={styles.map}
-              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+              provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: order.deliveryAddress.latitude || 41.0082,
                 longitude: order.deliveryAddress.longitude || 28.9784,

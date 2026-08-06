@@ -121,7 +121,7 @@ export default function RestaurantDetailScreen() {
             <View style={styles.mapContainer}>
               <MapView
                 style={styles.map}
-                provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+                provider={PROVIDER_GOOGLE}
                 initialRegion={{
                   latitude: restaurant.latitude || 41.0082,
                   longitude: restaurant.longitude || 28.9784,
