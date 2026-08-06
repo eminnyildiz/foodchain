@@ -11,10 +11,6 @@ if (Platform.OS === 'web') {
   const WebMaps = require('@teovilla/react-native-web-maps');
   MapView = WebMaps.default;
   Marker = WebMaps.Marker;
-  // Initialize with env variable - it will be automatically injected on web
-  if (WebMaps.initMap && process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY) {
-    WebMaps.initMap(process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY);
-  }
 } else {
   const Maps = require('react-native-maps');
   MapView = Maps.default;

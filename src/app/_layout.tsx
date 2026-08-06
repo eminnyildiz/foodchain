@@ -4,10 +4,23 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useTheme } from '../hooks/useTheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+if (Platform.OS === 'web' && typeof window !== 'undefined') {
+  const existingScript = document.getElementById('google-maps-script');
+  if (!existingScript) {
+    const script = document.createElement('script');
+    script.id = 'google-maps-script';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+}
 
 SplashScreen.preventAutoHideAsync();
 
