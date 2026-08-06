@@ -207,7 +207,24 @@ eas build --platform android --profile production
 eas build --platform ios --profile production
 ```
 
----
+## ⚙️ Yapılandırma
+
+### Google Maps
+`app.json` dosyasında API anahtarlarınızı güncelleyin:
+```json
+"ios": { "config": { "googleMapsApiKey": "YOUR_KEY" } },
+"android": { "config": { "googleMaps": { "apiKey": "YOUR_KEY" } } }
+```
+
+### Google AdMob
+`app.json` dosyasında AdMob App ID'lerini gerçek ID'lerinizle değiştirin:
+```json
+["react-native-google-mobile-ads", {
+  "androidAppId": "ca-app-pub-XXXX~YYYY",
+  "iosAppId": "ca-app-pub-XXXX~YYYY"
+}]
+```
+
 
 ## 📄 Lisans
 Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
