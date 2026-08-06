@@ -77,7 +77,7 @@ export default function MenuManagementScreen() {
         description: formData.description,
         price: parseFloat(formData.price) || 0,
         image: 'https://images.unsplash.com/photo-1546069901-ba6ba6183a27?w=800&q=80',
-        category: formData.category || 'Genel',
+        category: formData.category || t('common.general'),
         isAvailable: true,
       };
       setItems([newItem, ...items]);

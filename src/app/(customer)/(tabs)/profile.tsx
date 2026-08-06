@@ -61,7 +61,7 @@ export default function ProfileScreen() {
 
         {/* Settings */}
         <View style={[styles.settingsCard, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
-          <SettingRow icon="📍" label={t('profile.myAddresses')} onPress={() => Alert.alert(t('common.info', 'Bilgi'), 'Bu özellik yakında eklenecek.')} />
+          <SettingRow icon="📍" label={t('profile.myAddresses')} onPress={() => Alert.alert(t('common.info'), t('common.comingSoon'))} />
           <SettingRow
             icon="🌐"
             label={t('profile.language')}
@@ -100,7 +100,7 @@ export default function ProfileScreen() {
               />
             }
           />
-          <SettingRow icon="ℹ️" label={t('profile.settings')} onPress={() => Alert.alert(t('common.info', 'Bilgi'), 'Bu özellik yakında eklenecek.')} />
+          <SettingRow icon="ℹ️" label={t('profile.settings')} onPress={() => Alert.alert(t('common.info'), t('common.comingSoon'))} />
         </View>
 
         <View style={{ marginTop: 24 }}>

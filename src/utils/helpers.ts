@@ -36,6 +36,8 @@ export const getGreetingKey = (): string => {
   }
 };
 
+export const getGreeting = getGreetingKey;
+
 export const shuffleArray = <T>(arr: T[]): T[] => {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {

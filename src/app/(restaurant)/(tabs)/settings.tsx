@@ -25,6 +25,7 @@ export default function RestaurantSettingsScreen() {
           <View style={[styles.avatar, { backgroundColor: theme.colors.primary }]}>
             <Text style={styles.avatarText}>{getInitials(user?.name || 'R')}</Text>
           </View>
+          {/* Demo data - in production, fetch from store */}
           <Text style={[styles.restName, { color: theme.colors.text }]}>Kebapçı Mehmet Usta</Text>
           <Text style={[styles.restEmail, { color: theme.colors.textSecondary }]}>{user?.email}</Text>
         </View>

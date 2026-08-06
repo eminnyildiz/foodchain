@@ -13,7 +13,7 @@ interface SearchBarProps {
 export const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChangeText,
-  placeholder = 'Ara...',
+  placeholder = '',
   onSubmit,
   autoFocus = false,
 }) => {

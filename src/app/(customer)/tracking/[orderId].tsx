@@ -30,6 +30,7 @@ export default function TrackingScreen() {
   const [currentStatus, setCurrentStatus] = useState<OrderStatus>(order?.status || 'pending');
 
   // Simulate order progression
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!order || currentStatus === 'delivered' || currentStatus === 'cancelled') return;
 

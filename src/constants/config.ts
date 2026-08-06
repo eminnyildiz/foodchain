@@ -54,7 +54,7 @@ export const MAP_CONFIG = {
 
 export const ORDER_CONFIG = {
   minOrderAmount: 50,
-  defaultDeliveryFee: 15,
+  defaultDeliveryFee: 10,
   freeDeliveryThreshold: 150,
   estimatedDeliveryTimeMin: 20,
   estimatedDeliveryTimeMax: 45,

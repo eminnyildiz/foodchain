@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useTheme } from '../hooks/useTheme';
@@ -20,6 +20,7 @@ function RootLayoutNav() {
   const { isAuthenticated, user } = useAuthStore();
   const isDarkMode = useSettingsStore((s) => s.isDarkMode);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)';
 

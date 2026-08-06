@@ -18,7 +18,15 @@
     "ok": "OK",
     "seeAll": "See All",
     "noResults": "No results found",
-    "free": "Free"
+    "free": "Free",
+    "info": "Info",
+    "comingSoon": "This feature is coming soon.",
+    "general": "General"
+  },
+  "greetings": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
   },
   "auth": {
     "login": "Login",
@@ -43,7 +51,8 @@
     "dontHaveAccount": "Don't have an account?",
     "forgotPasswordTitle": "Forgot your password?",
     "forgotPasswordSubtitle": "Enter your email and we'll send you a reset link",
-    "resetEmailSent": "Password reset link has been sent"
+    "resetEmailSent": "Password reset link has been sent",
+    "demoAccounts": "Demo Accounts:"
   },
   "home": {
     "nearbyRestaurants": "Nearby Restaurants",
@@ -53,7 +62,8 @@
     "minOrder": "Min. Order",
     "greeting": "Home",
     "searchPlaceholder": "Search restaurants or food...",
-    "allCategories": "All Categories"
+    "allCategories": "All Categories",
+    "freeDelivery": "Free Delivery"
   },
   "categories": {
     "pizza": "Pizza",

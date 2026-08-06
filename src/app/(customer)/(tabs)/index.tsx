@@ -18,6 +18,7 @@ import { useCartStore } from '../../../store/cartStore';
 import { demoRestaurants } from '../../../data/restaurants';
 import { categories } from '../../../data/categories';
 import { formatPrice, formatDeliveryTime } from '../../../utils/formatters';
+import { getGreeting } from '../../../utils/helpers';
 
 const { width } = Dimensions.get('window');
 
@@ -38,7 +39,7 @@ export default function HomeScreen() {
           <View style={styles.headerTop}>
             <View>
               <Text style={styles.greeting}>
-                Merhaba, {user?.name || 'User'} 👋
+                {t(getGreeting())}, {user?.name || 'User'} 👋
               </Text>
               <Text style={styles.address}>
                 📍 {user?.addresses?.[0]?.address || 'İstanbul, Türkiye'}
@@ -127,7 +128,7 @@ export default function HomeScreen() {
                 />
                 {item.deliveryFee === 0 && (
                   <View style={[styles.freeDeliveryBadge, { backgroundColor: theme.colors.accent }]}>
-                    <Text style={styles.freeDeliveryText}>Ücretsiz Teslimat</Text>
+                    <Text style={styles.freeDeliveryText}>{t('home.freeDelivery')}</Text>
                   </View>
                 )}
                 <View style={styles.featuredInfo}>

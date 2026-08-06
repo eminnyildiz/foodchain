@@ -18,7 +18,15 @@
     "ok": "Tamam",
     "seeAll": "Tümünü Gör",
     "noResults": "Sonuç bulunamadı",
-    "free": "Ücretsiz"
+    "free": "Ücretsiz",
+    "info": "Bilgi",
+    "comingSoon": "Bu özellik yakında eklenecek.",
+    "general": "Genel"
+  },
+  "greetings": {
+    "morning": "Günaydın",
+    "afternoon": "İyi günler",
+    "evening": "İyi akşamlar"
   },
   "auth": {
     "login": "Giriş Yap",
@@ -43,7 +51,8 @@
     "dontHaveAccount": "Hesabınız yok mu?",
     "forgotPasswordTitle": "Şifrenizi mi unuttunuz?",
     "forgotPasswordSubtitle": "E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim",
-    "resetEmailSent": "Şifre sıfırlama bağlantısı gönderildi"
+    "resetEmailSent": "Şifre sıfırlama bağlantısı gönderildi",
+    "demoAccounts": "Demo Hesaplar:"
   },
   "home": {
     "nearbyRestaurants": "Yakınındaki Restoranlar",
@@ -53,7 +62,8 @@
     "minOrder": "Min. Sipariş",
     "greeting": "Ana Sayfa",
     "searchPlaceholder": "Restoran veya yemek ara...",
-    "allCategories": "Tüm Kategoriler"
+    "allCategories": "Tüm Kategoriler",
+    "freeDelivery": "Ücretsiz Teslimat"
   },
   "categories": {
     "pizza": "Pizza",

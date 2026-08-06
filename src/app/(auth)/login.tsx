@@ -132,7 +132,7 @@ export default function LoginScreen() {
 
           {/* Demo hint */}
           <View style={[styles.demoBox, { backgroundColor: theme.colors.surfaceVariant, borderRadius: theme.borderRadius.md }]}>
-            <Text style={[styles.demoTitle, { color: theme.colors.textSecondary }]}>Demo Hesaplar:</Text>
+            <Text style={[styles.demoTitle, { color: theme.colors.textSecondary }]}>{t('auth.demoAccounts')}</Text>
             <Text style={[styles.demoText, { color: theme.colors.textTertiary }]}>
               🛒 customer@test.com / 123456{'\n'}
               🏪 restaurant@test.com / 123456

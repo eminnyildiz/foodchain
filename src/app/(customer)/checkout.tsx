@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, StyleSheet, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, Pressable, StyleSheet, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +10,6 @@ import { useAuthStore } from '../../store/authStore';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { formatPrice } from '../../utils/formatters';
-import { generateId } from '../../utils/helpers';
 
 export default function CheckoutScreen() {
   const theme = useTheme();
@@ -151,7 +150,7 @@ export default function CheckoutScreen() {
           <View style={styles.summaryRow}>
             <Text style={{ color: theme.colors.textSecondary }}>{t('cart.deliveryFee')}</Text>
             <Text style={{ color: theme.colors.text, fontWeight: '600' }}>
-              {deliveryFee === 0 ? 'Ücretsiz' : formatPrice(deliveryFee)}
+              {deliveryFee === 0 ? t('common.free') : formatPrice(deliveryFee)}
             </Text>
           </View>
           <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />

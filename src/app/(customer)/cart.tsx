@@ -98,7 +98,7 @@ export default function CartScreen() {
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { color: theme.colors.textSecondary }]}>{t('cart.deliveryFee')}</Text>
             <Text style={[styles.summaryValue, { color: deliveryFee === 0 ? theme.colors.success : theme.colors.text }]}>
-              {deliveryFee === 0 ? 'Ücretsiz' : formatPrice(deliveryFee)}
+              {deliveryFee === 0 ? t('common.free') : formatPrice(deliveryFee)}
             </Text>
           </View>
           <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
