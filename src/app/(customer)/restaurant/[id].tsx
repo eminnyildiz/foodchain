@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, StyleSheet, Alert, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Pressable, StyleSheet, Alert, Dimensions, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useTheme } from '../../../hooks/useTheme';
 import { useCartStore } from '../../../store/cartStore';
 import { demoRestaurants } from '../../../data/restaurants';
@@ -102,6 +103,31 @@ export default function RestaurantDetailScreen() {
             text={restaurant.isOpen ? (t('restaurant.open') || 'Açık') : (t('restaurant.closed') || 'Kapalı')}
             variant={restaurant.isOpen ? 'success' : 'error'}
           />
+          
+          {/* Restaurant Location Map */}
+          <View style={styles.mapContainer}>
+            <MapView
+              style={styles.map}
+              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+              initialRegion={{
+                latitude: restaurant.latitude || 41.0082,
+                longitude: restaurant.longitude || 28.9784,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+              scrollEnabled={false}
+              zoomEnabled={false}
+            >
+              <Marker
+                coordinate={{
+                  latitude: restaurant.latitude || 41.0082,
+                  longitude: restaurant.longitude || 28.9784,
+                }}
+                title={restaurant.name}
+                description={restaurant.address}
+              />
+            </MapView>
+          </View>
         </View>
 
         {/* Menu Categories */}
@@ -194,6 +220,9 @@ const styles = StyleSheet.create({
   metaValue: { fontSize: 14, fontWeight: '700' },
   metaLabel: { fontSize: 12 },
   metaDivider: { width: 1, height: 24 },
+  checkoutTotalValue: { fontSize: 16, fontWeight: '800' },
+  mapContainer: { height: 150, borderRadius: 12, overflow: 'hidden', marginTop: 16 },
+  map: { ...StyleSheet.absoluteFill as any },
   categoryScroll: { marginTop: 20, maxHeight: 40 },
   categoryChip: { paddingHorizontal: 16, paddingVertical: 8 },
   menuList: { padding: 16, gap: 12 },

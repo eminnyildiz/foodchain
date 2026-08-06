@@ -16,7 +16,7 @@
         "NSLocationAlwaysUsageDescription": "FoodChain teslimat takibi için arka planda konumunuza ihtiyaç duyar."
       },
       "config": {
-        "googleMapsApiKey": "YOUR_IOS_GOOGLE_MAPS_API_KEY"
+        "googleMapsApiKey": "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
       }
     },
     "android": {
@@ -33,7 +33,7 @@
       ],
       "config": {
         "googleMaps": {
-          "apiKey": "YOUR_ANDROID_GOOGLE_MAPS_API_KEY"
+          "apiKey": "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
         }
       }
     },
