@@ -39,10 +39,10 @@ export default function HomeScreen() {
           <View style={styles.headerTop}>
             <View>
               <Text style={styles.greeting}>
-                {t(getGreeting())}, {user?.name || 'User'} 👋
+                {t(getGreeting())}, {user?.firstName || 'User'} 👋
               </Text>
               <Text style={styles.address}>
-                📍 {user?.addresses?.[0]?.address || 'İstanbul, Türkiye'}
+                📍 {user?.addresses?.[0]?.street || 'İstanbul, Türkiye'}
               </Text>
             </View>
             {cartCount > 0 && (
@@ -87,7 +87,7 @@ export default function HomeScreen() {
                   <Text style={styles.categoryEmoji}>{item.icon}</Text>
                 </View>
                 <Text style={[styles.categoryName, { color: theme.colors.textSecondary }]}>
-                  {t(item.nameKey)}
+                  {item.name}
                 </Text>
               </Pressable>
             )}
@@ -122,7 +122,7 @@ export default function HomeScreen() {
                 ]}
               >
                 <Image
-                  source={{ uri: item.image }}
+                  source={{ uri: item.coverImage }}
                   style={[styles.featuredImage, { borderTopLeftRadius: theme.borderRadius.lg, borderTopRightRadius: theme.borderRadius.lg }]}
                   contentFit="cover"
                 />
@@ -138,7 +138,7 @@ export default function HomeScreen() {
                   <View style={styles.featuredMeta}>
                     <Text style={styles.ratingText}>⭐ {item.rating}</Text>
                     <Text style={[styles.metaText, { color: theme.colors.textTertiary }]}>
-                      🕐 {formatDeliveryTime(item.deliveryTime)}
+                      🕐 {item.deliveryTime}
                     </Text>
                   </View>
                 </View>
@@ -171,7 +171,7 @@ export default function HomeScreen() {
               ]}
             >
               <Image
-                source={{ uri: restaurant.image }}
+                source={{ uri: restaurant.coverImage }}
                 style={[styles.restaurantImage, { borderRadius: theme.borderRadius.md }]}
                 contentFit="cover"
               />
@@ -186,7 +186,7 @@ export default function HomeScreen() {
                   <Text style={styles.ratingText}>⭐ {restaurant.rating}</Text>
                   <Text style={[styles.metaDot, { color: theme.colors.textTertiary }]}>•</Text>
                   <Text style={[styles.metaText, { color: theme.colors.textTertiary }]}>
-                    🕐 {formatDeliveryTime(restaurant.deliveryTime)}
+                    🕐 {restaurant.deliveryTime}
                   </Text>
                   <Text style={[styles.metaDot, { color: theme.colors.textTertiary }]}>•</Text>
                   <Text style={[styles.metaText, { color: theme.colors.textTertiary }]}>

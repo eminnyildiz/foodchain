@@ -18,6 +18,7 @@
     "ok": "OK",
     "seeAll": "See All",
     "noResults": "No results found",
+    "default": "Default",
     "free": "Free",
     "info": "Info",
     "comingSoon": "This feature is coming soon.",
@@ -94,7 +95,18 @@
     "restaurantInfo": "Restaurant Info",
     "workingHours": "Working Hours",
     "address": "Address",
-    "phone": "Phone"
+    "phone": "Phone",
+    "writeReview": "Write a Review",
+    "yourRating": "Your Rating",
+    "yourComment": "Your Comment",
+    "commentPlaceholder": "Share your experience...",
+    "submitReview": "Submit Review",
+    "reviewSubmitted": "Review Submitted",
+    "reviewSubmittedMessage": "Thank you for your feedback!",
+    "alreadyReviewed": "You have already reviewed this restaurant",
+    "noReviews": "No reviews yet",
+    "noReviewsMessage": "Be the first to leave a review!",
+    "rateOrder": "Rate Order"
   },
   "cart": {
     "myCart": "My Cart",

@@ -18,6 +18,7 @@
     "ok": "Tamam",
     "seeAll": "Tümünü Gör",
     "noResults": "Sonuç bulunamadı",
+    "default": "Varsayılan",
     "free": "Ücretsiz",
     "info": "Bilgi",
     "comingSoon": "Bu özellik yakında eklenecek.",
@@ -94,7 +95,18 @@
     "restaurantInfo": "Restoran Bilgisi",
     "workingHours": "Çalışma Saatleri",
     "address": "Adres",
-    "phone": "Telefon"
+    "phone": "Telefon",
+    "writeReview": "Değerlendirme Yaz",
+    "yourRating": "Puanınız",
+    "yourComment": "Yorumunuz",
+    "commentPlaceholder": "Deneyiminizi paylaşın...",
+    "submitReview": "Değerlendirmeyi Gönder",
+    "reviewSubmitted": "Değerlendirmeniz Gönderildi",
+    "reviewSubmittedMessage": "Geri bildiriminiz için teşekkürler!",
+    "alreadyReviewed": "Bu restoran için zaten değerlendirme yaptınız",
+    "noReviews": "Henüz değerlendirme yok",
+    "noReviewsMessage": "İlk değerlendirmeyi siz yazın!",
+    "rateOrder": "Siparişi Değerlendir"
   },
   "cart": {
     "myCart": "Sepetim",

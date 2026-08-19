@@ -51,28 +51,27 @@ export default function CheckoutScreen() {
     const address = user?.addresses?.[0] || {
       id: 'default',
       title: 'Ev',
-      address: 'İstanbul, Türkiye',
-      latitude: 41.0082,
-      longitude: 28.9784,
+      street: 'İstanbul, Türkiye',
+      city: 'Istanbul',
+      district: 'Merkez',
+      postalCode: '34000',
+      coordinates: { lat: 41.0082, lng: 28.9784 },
       isDefault: true,
     };
 
     const newOrder = createOrder({
-      customerId: user?.id || 'guest',
+      userId: user?.id || 'guest',
       restaurantId: cart.restaurantId || '',
-      restaurantName: cart.restaurantName || '',
       items: cart.items,
       subtotal,
       deliveryFee,
-      totalAmount: total,
+      total,
       deliveryAddress: address,
       paymentInfo: {
-        cardNumber: cardNumber.replace(/\s/g, ''),
-        cardHolder,
-        expiryDate: expiry,
-        cvv,
+        method: 'credit_card',
+        last4: cardNumber.slice(-4),
       },
-      estimatedDeliveryTime: 30,
+      estimatedDeliveryTime: '30 min',
     });
 
     setOrderId(newOrder.id);
@@ -97,7 +96,7 @@ export default function CheckoutScreen() {
         <View style={[styles.section, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>📍 {t('checkout.deliveryAddress')}</Text>
           <Text style={[styles.addressText, { color: theme.colors.textSecondary }]}>
-            {user?.addresses?.[0]?.title} - {user?.addresses?.[0]?.address || 'İstanbul, Türkiye'}
+            {user?.addresses?.[0]?.title} - {user?.addresses?.[0]?.street || 'İstanbul, Türkiye'}
           </Text>
         </View>
 

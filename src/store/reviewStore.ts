@@ -9,7 +9,7 @@ interface ReviewState {
   getReviewsByRestaurant: (restaurantId: string) => Review[];
   getAverageRating: (restaurantId: string) => number;
   getReviewCount: (restaurantId: string) => number;
-  hasUserReviewedOrder: (userId: string, restaurantId: string, orderId: string) => boolean;
+  hasUserReviewedOrder: (userId: string, orderId: string) => boolean;
 }
 
 const generateId = (): string => 'rev_' + Math.random().toString(36).substring(2, 10);
@@ -17,8 +17,8 @@ const generateId = (): string => 'rev_' + Math.random().toString(36).substring(2
 const demoReviews: Review[] = [
   {
     id: 'rev_demo_01',
+    orderId: 'order_001',
     userId: 'user_customer_01',
-    userName: 'Ahmet Y.',
     restaurantId: 'r1',
     rating: 5,
     comment: 'Adana kebap mükemmeldi, çok lezzetli!',
@@ -26,8 +26,8 @@ const demoReviews: Review[] = [
   },
   {
     id: 'rev_demo_02',
+    orderId: 'order_demo_02',
     userId: 'user_demo_02',
-    userName: 'Zeynep K.',
     restaurantId: 'r1',
     rating: 4,
     comment: 'Porsiyon güzel, teslimat biraz geç geldi.',
@@ -35,8 +35,8 @@ const demoReviews: Review[] = [
   },
   {
     id: 'rev_demo_03',
+    orderId: 'order_demo_03',
     userId: 'user_demo_03',
-    userName: 'Can D.',
     restaurantId: 'r2',
     rating: 5,
     comment: 'En iyi pizza İstanbul\'da burada!',
@@ -44,8 +44,8 @@ const demoReviews: Review[] = [
   },
   {
     id: 'rev_demo_04',
+    orderId: 'order_demo_04',
     userId: 'user_demo_04',
-    userName: 'Elif S.',
     restaurantId: 'r3',
     rating: 4,
     comment: 'Somon tazeydi, sunum çok güzel.',
@@ -53,8 +53,8 @@ const demoReviews: Review[] = [
   },
   {
     id: 'rev_demo_05',
+    orderId: 'order_demo_05',
     userId: 'user_demo_05',
-    userName: 'Burak A.',
     restaurantId: 'r4',
     rating: 3,
     comment: 'Burger fena değil ama patates soğuktu.',
@@ -62,8 +62,8 @@ const demoReviews: Review[] = [
   },
   {
     id: 'rev_demo_06',
+    orderId: 'order_demo_06',
     userId: 'user_demo_06',
-    userName: 'Selin M.',
     restaurantId: 'r5',
     rating: 5,
     comment: 'Çiğ köfte dürüm harika, her zaman sipariş veriyorum!',
@@ -103,11 +103,9 @@ export const useReviewStore = create<ReviewState>()(
         return get().reviews.filter((r) => r.restaurantId === restaurantId).length;
       },
 
-      hasUserReviewedOrder: (userId: string, restaurantId: string, _orderId: string): boolean => {
-        // Simple check: has the user already reviewed this restaurant?
-        // In a real app, this would be per-order
+      hasUserReviewedOrder: (userId: string, orderId: string): boolean => {
         return get().reviews.some(
-          (r) => r.userId === userId && r.restaurantId === restaurantId
+          (r) => r.userId === userId && r.orderId === orderId
         );
       },
     }),

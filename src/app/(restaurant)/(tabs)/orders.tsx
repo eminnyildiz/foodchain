@@ -82,7 +82,7 @@ export default function RestaurantOrdersScreen() {
               {item.items.map((i) => `${i.quantity}x ${i.menuItem.name}`).join(', ')}
             </Text>
             <View style={styles.orderFooter}>
-              <Text style={[styles.orderTotal, { color: theme.colors.primary }]}>{formatPrice(item.totalAmount)}</Text>
+              <Text style={[styles.orderTotal, { color: theme.colors.primary }]}>{formatPrice(item.total)}</Text>
               {nextStatus[item.status] && (
                 <Button
                   title={t('restaurantPanel.updateStatus')}

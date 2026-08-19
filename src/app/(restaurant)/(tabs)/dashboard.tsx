@@ -25,7 +25,7 @@ export default function DashboardScreen() {
   const user = useAuthStore((s) => s.user);
 
   const todayOrders = demoOrders.filter((o) => o.status !== 'cancelled');
-  const todayRevenue = todayOrders.reduce((sum, o) => sum + o.totalAmount, 0);
+  const todayRevenue = todayOrders.reduce((sum, o) => sum + o.total, 0);
   const activeOrders = demoOrders.filter((o) => !['delivered', 'cancelled'].includes(o.status));
 
 
@@ -38,7 +38,7 @@ export default function DashboardScreen() {
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <Text style={[styles.greeting, { color: theme.colors.text }]}>
-          {t('home.greeting')}, {user?.name || 'Restoran'} 👋
+          {t('home.greeting')}, {user?.firstName || 'Restoran'} 👋
         </Text>
         <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
           {t('restaurantPanel.dashboard')}
@@ -90,7 +90,7 @@ export default function DashboardScreen() {
                   {order.items.length} {t('cart.itemCount')}
                 </Text>
               </View>
-              <Text style={[styles.orderAmount, { color: theme.colors.primary }]}>{formatPrice(order.totalAmount)}</Text>
+              <Text style={[styles.orderAmount, { color: theme.colors.primary }]}>{formatPrice(order.total)}</Text>
             </View>
           ))}
         </Card>

@@ -43,7 +43,7 @@ export default function ProfileScreen() {
   const logout = useAuthStore((s) => s.logout);
   const { isDarkMode, toggleDarkMode, language, setLanguage, notificationsEnabled, toggleNotifications } = useSettingsStore();
 
-  const initials = getInitials(`${user?.name || ''} ${user?.surname || ''}`);
+  const initials = getInitials(`${user?.firstName || ''} ${user?.lastName || ''}`);
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.background }]}>
@@ -56,7 +56,7 @@ export default function ProfileScreen() {
             <Text style={styles.avatarText}>{initials}</Text>
           </View>
           <Text style={[styles.userName, { color: theme.colors.text }]}>
-            {user?.name} {user?.surname}
+            {user?.firstName} {user?.lastName}
           </Text>
           <Text style={[styles.userEmail, { color: theme.colors.textSecondary }]}>{user?.email}</Text>
         </View>

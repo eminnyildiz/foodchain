@@ -47,7 +47,7 @@ export const useCartStore = create<CartState>()(
           set({ items: updatedItems, restaurantId: restaurant.id, restaurantName: restaurant.name });
         } else {
           // Push new CartItem with quantity 1
-          const newItem: CartItem = {
+          const newItem: CartItem = { id: Math.random().toString(), selectedOptions: [], note: '',
             menuItem: item,
             quantity: 1,
           };

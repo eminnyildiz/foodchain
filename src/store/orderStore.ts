@@ -2,18 +2,18 @@ import { create } from 'zustand';
 import { Order, OrderStatus, CartItem, Address, PaymentInfo } from '../types';
 
 interface CreateOrderParams {
-  customerId: string;
+  userId: string;
   restaurantId: string;
-  restaurantName: string;
-  restaurantImage?: string;
+
+
   items: CartItem[];
   subtotal: number;
   deliveryFee: number;
-  totalAmount: number;
+  total: number;
   deliveryAddress: Address;
   paymentInfo: PaymentInfo;
   note?: string;
-  estimatedDeliveryTime?: number;
+  estimatedDeliveryTime?: string;
 }
 
 interface OrderState {
@@ -45,47 +45,43 @@ const simulateOrderProgress = (orderId: string, get: () => OrderState) => {
 const demoAddress: Address = {
   id: 'addr_1',
   title: 'Ev',
-  address: 'Kadıköy, İstanbul, Türkiye',
-  latitude: 40.9819,
-  longitude: 29.0573,
+  street: 'Kadıköy, İstanbul, Türkiye', city: 'Istanbul', district: 'Kadikoy', postalCode: '34000',
+  coordinates: { lat: 40.9819, lng: 29.0573 },
   isDefault: true,
 };
 
 const demoPaymentInfo: PaymentInfo = {
-  cardNumber: '**** **** **** 4242',
-  cardHolder: 'Ahmet Yıldız',
-  expiryDate: '12/27',
-  cvv: '***',
+  method: 'credit_card', last4: '1234',
 };
 
 const demoOrders: Order[] = [
   {
     id: 'order_001',
-    customerId: 'user_customer_01',
+    userId: 'user_customer_01',
     restaurantId: 'r1',
-    restaurantName: 'Kebapçı Mehmet Usta',
-    restaurantImage: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400',
-    items: [
+            items: [
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm1',
           restaurantId: 'r1',
           name: 'Adana Kebap',
           description: 'Özel baharatlarla hazırlanmış el yapımı Adana kebap',
           price: 185,
-          category: 'Kebaplar',
+          categoryId: 'Kebaplar',
           isAvailable: true,
         },
         quantity: 2,
       },
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm2',
           restaurantId: 'r1',
           name: 'Ayran',
           description: 'Taze yayık ayran',
           price: 20,
-          category: 'İçecekler',
+          categoryId: 'İçecekler',
           isAvailable: true,
         },
         quantity: 2,
@@ -94,40 +90,39 @@ const demoOrders: Order[] = [
     status: 'delivered',
     subtotal: 410,
     deliveryFee: 0,
-    totalAmount: 410,
+    total: 410,
     deliveryAddress: demoAddress,
     paymentInfo: demoPaymentInfo,
     createdAt: '2026-07-10T12:30:00.000Z',
-    updatedAt: '2026-07-10T13:15:00.000Z',
-    estimatedDeliveryTime: 35,
+        estimatedDeliveryTime: '35 min',
   },
   {
     id: 'order_002',
-    customerId: 'user_customer_01',
+    userId: 'user_customer_01',
     restaurantId: 'r2',
-    restaurantName: 'Pizza Napoli',
-    restaurantImage: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400',
-    items: [
+            items: [
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm3',
           restaurantId: 'r2',
           name: 'Margherita Pizza',
           description: 'Domates sosu, mozzarella ve fesleğen',
           price: 140,
-          category: 'Pizzalar',
+          categoryId: 'Pizzalar',
           isAvailable: true,
         },
         quantity: 1,
       },
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm4',
           restaurantId: 'r2',
           name: 'Tiramisu',
           description: 'Ev yapımı İtalyan tiramisu',
           price: 75,
-          category: 'Tatlılar',
+          categoryId: 'Tatlılar',
           isAvailable: true,
         },
         quantity: 1,
@@ -136,40 +131,39 @@ const demoOrders: Order[] = [
     status: 'cancelled',
     subtotal: 215,
     deliveryFee: 0,
-    totalAmount: 215,
+    total: 215,
     deliveryAddress: demoAddress,
     paymentInfo: demoPaymentInfo,
     createdAt: '2026-07-09T18:45:00.000Z',
-    updatedAt: '2026-07-09T19:00:00.000Z',
-    estimatedDeliveryTime: 35,
+        estimatedDeliveryTime: '35 min',
   },
   {
     id: 'order_003',
-    customerId: 'user_customer_01',
+    userId: 'user_customer_01',
     restaurantId: 'r3',
-    restaurantName: 'Sushi Master',
-    restaurantImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400',
-    items: [
+            items: [
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm5',
           restaurantId: 'r3',
           name: 'Salmon Nigiri Set',
           description: '8 parça taze somon nigiri',
           price: 220,
-          category: 'Sushi',
+          categoryId: 'Sushi',
           isAvailable: true,
         },
         quantity: 1,
       },
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm6',
           restaurantId: 'r3',
           name: 'Miso Çorbası',
           description: 'Geleneksel Japon miso çorbası',
           price: 45,
-          category: 'Çorbalar',
+          categoryId: 'Çorbalar',
           isAvailable: true,
         },
         quantity: 2,
@@ -178,40 +172,39 @@ const demoOrders: Order[] = [
     status: 'preparing',
     subtotal: 310,
     deliveryFee: 0,
-    totalAmount: 310,
+    total: 310,
     deliveryAddress: demoAddress,
     paymentInfo: demoPaymentInfo,
     createdAt: '2026-07-14T14:00:00.000Z',
-    updatedAt: '2026-07-14T14:10:00.000Z',
-    estimatedDeliveryTime: 35,
+        estimatedDeliveryTime: '35 min',
   },
   {
     id: 'order_004',
-    customerId: 'user_customer_01',
+    userId: 'user_customer_01',
     restaurantId: 'r4',
-    restaurantName: 'Burger House',
-    restaurantImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',
-    items: [
+            items: [
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm7',
           restaurantId: 'r4',
           name: 'Classic Cheeseburger',
           description: 'Dana eti, cheddar, marul, domates ve özel sos',
           price: 135,
-          category: 'Burgerler',
+          categoryId: 'Burgerler',
           isAvailable: true,
         },
         quantity: 2,
       },
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm8',
           restaurantId: 'r4',
           name: 'Patates Kızartması',
           description: 'Çıtır patates kızartması',
           price: 45,
-          category: 'Yan Ürünler',
+          categoryId: 'Yan Ürünler',
           isAvailable: true,
         },
         quantity: 1,
@@ -220,40 +213,39 @@ const demoOrders: Order[] = [
     status: 'pending',
     subtotal: 315,
     deliveryFee: 0,
-    totalAmount: 315,
+    total: 315,
     deliveryAddress: demoAddress,
     paymentInfo: demoPaymentInfo,
     createdAt: '2026-07-14T17:00:00.000Z',
-    updatedAt: '2026-07-14T17:00:00.000Z',
-    estimatedDeliveryTime: 35,
+        estimatedDeliveryTime: '35 min',
   },
   {
     id: 'order_005',
-    customerId: 'user_customer_01',
+    userId: 'user_customer_01',
     restaurantId: 'r5',
-    restaurantName: 'Çiğ Köfteci Ali Usta',
-    restaurantImage: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400',
-    items: [
+            items: [
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm9',
           restaurantId: 'r5',
           name: 'Çiğ Köfte Dürüm',
           description: 'Nar ekşili, yeşillikli çiğ köfte dürüm',
           price: 65,
-          category: 'Dürümler',
+          categoryId: 'Dürümler',
           isAvailable: true,
         },
         quantity: 3,
       },
       {
+        id: 'cart-item-1',
         menuItem: {
           id: 'm10',
           restaurantId: 'r5',
           name: 'Şalgam',
           description: 'Acılı şalgam suyu',
           price: 15,
-          category: 'İçecekler',
+          categoryId: 'İçecekler',
           isAvailable: true,
         },
         quantity: 3,
@@ -262,12 +254,11 @@ const demoOrders: Order[] = [
     status: 'confirmed',
     subtotal: 240,
     deliveryFee: 0,
-    totalAmount: 240,
+    total: 240,
     deliveryAddress: demoAddress,
     paymentInfo: demoPaymentInfo,
     createdAt: '2026-07-14T16:30:00.000Z',
-    updatedAt: '2026-07-14T16:35:00.000Z',
-    estimatedDeliveryTime: 35,
+        estimatedDeliveryTime: '35 min',
   },
 ];
 
@@ -278,21 +269,21 @@ export const useOrderStore = create<OrderState>((set, get) => ({
     const now = new Date().toISOString();
     const order: Order = {
       id: generateId(),
-      customerId: params.customerId,
+      userId: params.userId,
       restaurantId: params.restaurantId,
-      restaurantName: params.restaurantName,
-      restaurantImage: params.restaurantImage,
+      
+      
       items: params.items,
       status: 'pending',
       subtotal: params.subtotal,
       deliveryFee: params.deliveryFee,
-      totalAmount: params.totalAmount,
+      total: params.total,
       deliveryAddress: params.deliveryAddress,
       paymentInfo: params.paymentInfo,
-      note: params.note,
+      
       createdAt: now,
-      updatedAt: now,
-      estimatedDeliveryTime: 35,
+      
+      estimatedDeliveryTime: '35 min',
     };
 
     set((state) => ({ orders: [order, ...state.orders] }));

@@ -65,7 +65,7 @@ export default function TrackingScreen() {
   }
 
   const currentIdx = statusOrder.indexOf(currentStatus);
-  const estimatedMin = currentStatus === 'delivered' ? 0 : Math.max(5, (order.estimatedDeliveryTime || 30) - currentIdx * 8);
+  const estimatedMin = currentStatus === 'delivered' ? 0 : Math.max(5, (parseInt(order.estimatedDeliveryTime) || 30) - currentIdx * 8);
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.background }]}>
@@ -83,24 +83,24 @@ export default function TrackingScreen() {
           <AppMap
             markers={[
               {
-                latitude: (order.deliveryAddress.latitude || 41.0082) + 0.005,
-                longitude: (order.deliveryAddress.longitude || 28.9784) - 0.003,
-                title: order.restaurantName,
+                latitude: (order.deliveryAddress.coordinates?.lat || 41.0082) + 0.005,
+                longitude: (order.deliveryAddress.coordinates?.lng || 28.9784) - 0.003,
+                title: order.restaurantId,
                 description: t('restaurant.restaurantInfo'),
                 icon: <View style={styles.markerContainer}><Text style={{ fontSize: 22 }}>🏪</Text></View>,
               },
               {
-                latitude: order.deliveryAddress.latitude || 41.0082,
-                longitude: order.deliveryAddress.longitude || 28.9784,
+                latitude: order.deliveryAddress.coordinates?.lat || 41.0082,
+                longitude: order.deliveryAddress.coordinates?.lng || 28.9784,
                 title: order.deliveryAddress.title,
-                description: order.deliveryAddress.address,
+                description: order.deliveryAddress.street,
                 icon: <View style={styles.markerContainer}><Text style={{ fontSize: 22 }}>📍</Text></View>,
               },
               ...(currentStatus === 'onTheWay'
                 ? [
                     {
-                      latitude: (order.deliveryAddress.latitude || 41.0082) + 0.002,
-                      longitude: (order.deliveryAddress.longitude || 28.9784) - 0.001,
+                      latitude: (order.deliveryAddress.coordinates?.lat || 41.0082) + 0.002,
+                      longitude: (order.deliveryAddress.coordinates?.lng || 28.9784) - 0.001,
                       title: t('tracking.courierOnTheWay'),
                       icon: <View style={styles.markerContainer}><Text style={{ fontSize: 22 }}>🚴</Text></View>,
                     },
@@ -180,7 +180,7 @@ export default function TrackingScreen() {
 
         {/* Order details */}
         <View style={[styles.detailCard, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
-          <Text style={[styles.detailTitle, { color: theme.colors.text }]}>🏪 {order.restaurantName}</Text>
+          <Text style={[styles.detailTitle, { color: theme.colors.text }]}>🏪 {order.restaurantId}</Text>
           {order.items.map((item, i) => (
             <View key={i} style={styles.detailRow}>
               <Text style={[styles.detailItem, { color: theme.colors.textSecondary }]}>
@@ -194,7 +194,7 @@ export default function TrackingScreen() {
           <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
           <View style={styles.detailRow}>
             <Text style={[styles.totalLabel, { color: theme.colors.text }]}>{t('cart.total')}</Text>
-            <Text style={[styles.totalValue, { color: theme.colors.primary }]}>{formatPrice(order.totalAmount)}</Text>
+            <Text style={[styles.totalValue, { color: theme.colors.primary }]}>{formatPrice(order.total)}</Text>
           </View>
         </View>
       </ScrollView>

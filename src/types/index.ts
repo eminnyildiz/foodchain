@@ -1,62 +1,60 @@
 // FoodChain TypeScript Type Definitions
 
-export type UserRole = 'customer' | 'restaurant';
+export type UserRole = 'customer' | 'restaurant' | 'admin';
 
 export interface Address {
   id: string;
   title: string;
-  address: string;
-  latitude: number;
-  longitude: number;
+  street: string;
+  city: string;
+  district: string;
+  postalCode: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
   isDefault: boolean;
 }
 
 export interface User {
   id: string;
   email: string;
-  name: string;
-  surname: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   role: UserRole;
-  avatar?: string;
   addresses: Address[];
   createdAt: string;
 }
 
 export interface WorkingHours {
-  day: string;
   open: string;
   close: string;
-  isClosed: boolean;
 }
 
 export interface Restaurant {
   id: string;
   name: string;
   description: string;
-  image: string;
   coverImage: string;
   rating: number;
   reviewCount: number;
-  deliveryTime: number;
+  deliveryTime: string;
   deliveryFee: number;
-  minOrder: number;
+  minOrderAmount: number;
   categories: string[];
-  address: string;
-  latitude: number;
-  longitude: number;
-  phone: string;
-  workingHours: WorkingHours[];
+  workingHours: WorkingHours;
   isOpen: boolean;
-  ownerId: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface Category {
   id: string;
   name: string;
-  nameKey: string;
   icon: string;
-  image?: string;
 }
 
 export interface MenuItemOption {
@@ -68,16 +66,17 @@ export interface MenuItemOption {
 export interface MenuItem {
   id: string;
   restaurantId: string;
+  categoryId: string;
   name: string;
   description: string;
   price: number;
   image?: string;
-  category: string;
   isAvailable: boolean;
   options?: MenuItemOption[];
 }
 
 export interface CartItem {
+  id: string;
   menuItem: MenuItem;
   quantity: number;
   selectedOptions?: MenuItemOption[];
@@ -93,36 +92,29 @@ export type OrderStatus =
   | 'cancelled';
 
 export interface PaymentInfo {
-  cardNumber: string;
-  cardHolder: string;
-  expiryDate: string;
-  cvv: string;
+  method: 'credit_card' | 'cash_on_delivery';
+  last4: string;
 }
 
 export interface Order {
   id: string;
-  customerId: string;
+  userId: string;
   restaurantId: string;
-  restaurantName: string;
-  restaurantImage?: string;
   items: CartItem[];
   status: OrderStatus;
   subtotal: number;
   deliveryFee: number;
-  totalAmount: number;
+  total: number;
   deliveryAddress: Address;
   paymentInfo: PaymentInfo;
-  note?: string;
   createdAt: string;
-  updatedAt: string;
-  estimatedDeliveryTime: number;
+  estimatedDeliveryTime: string;
 }
 
 export interface Review {
   id: string;
+  orderId: string;
   userId: string;
-  userName: string;
-  userAvatar?: string;
   restaurantId: string;
   rating: number;
   comment: string;

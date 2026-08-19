@@ -7,9 +7,10 @@ import { Image } from 'expo-image';
 import AppMap from '../../../components/Map';
 import { useTheme } from '../../../hooks/useTheme';
 import { useCartStore } from '../../../store/cartStore';
+import { useReviewStore } from '../../../store/reviewStore';
 import { demoRestaurants } from '../../../data/restaurants';
 import { getMenuItemsByRestaurant, getMenuCategories } from '../../../data/menuItems';
-import { formatPrice, formatDeliveryTime } from '../../../utils/formatters';
+import { formatPrice, formatDeliveryTime, getRelativeTime } from '../../../utils/formatters';
 import { Badge } from '../../../components/ui/Badge';
 import { MenuItem } from '../../../types';
 
@@ -21,16 +22,21 @@ export default function RestaurantDetailScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const cart = useCartStore();
+  const reviewStore = useReviewStore();
 
   const restaurant = demoRestaurants.find((r) => r.id === id);
   const menuItems = getMenuItemsByRestaurant(id || '');
   const categories = getMenuCategories(id || '');
   const [activeCategory, setActiveCategory] = useState(categories[0] || '');
 
+  const reviews = reviewStore.getReviewsByRestaurant(id || '');
+  const avgRating = reviewStore.getAverageRating(id || '');
+  const reviewCount = reviewStore.getReviewCount(id || '');
+
   if (!restaurant) return null;
 
   const filteredItems = activeCategory
-    ? menuItems.filter((m) => m.category === activeCategory)
+    ? menuItems.filter((m) => m.categoryId === activeCategory)
     : menuItems;
 
   const handleAddToCart = (item: MenuItem) => {
@@ -80,14 +86,14 @@ export default function RestaurantDetailScreen() {
           <View style={styles.metaRow}>
             <View style={styles.metaItem}>
               <Text style={styles.metaIcon}>⭐</Text>
-              <Text style={[styles.metaValue, { color: theme.colors.text }]}>{restaurant.rating}</Text>
-              <Text style={[styles.metaLabel, { color: theme.colors.textTertiary }]}>({restaurant.reviewCount})</Text>
+              <Text style={[styles.metaValue, { color: theme.colors.text }]}>{avgRating || restaurant.rating}</Text>
+              <Text style={[styles.metaLabel, { color: theme.colors.textTertiary }]}>({reviewCount || restaurant.reviewCount})</Text>
             </View>
             <View style={[styles.metaDivider, { backgroundColor: theme.colors.border }]} />
             <View style={styles.metaItem}>
               <Text style={styles.metaIcon}>🕐</Text>
               <Text style={[styles.metaValue, { color: theme.colors.text }]}>
-                {formatDeliveryTime(restaurant.deliveryTime)}
+                {restaurant.deliveryTime}
               </Text>
             </View>
             <View style={[styles.metaDivider, { backgroundColor: theme.colors.border }]} />
@@ -109,14 +115,67 @@ export default function RestaurantDetailScreen() {
             <AppMap
               markers={[
                 {
-                  latitude: restaurant.latitude || 41.0082,
-                  longitude: restaurant.longitude || 28.9784,
+                  latitude: restaurant.coordinates.lat || 41.0082,
+                  longitude: restaurant.coordinates.lng || 28.9784,
                   title: restaurant.name,
-                  description: restaurant.address,
+                  description: 'Istanbul',
                 },
               ]}
             />
           </View>
+        </View>
+
+        {/* Reviews Section */}
+        <View style={[styles.reviewsSection, { paddingHorizontal: 16 }]}>
+          <Text style={[styles.reviewsSectionTitle, { color: theme.colors.text }]}>
+            ⭐ {t('restaurant.reviews')} ({reviewCount})
+          </Text>
+          {reviews.length === 0 ? (
+            <View style={[styles.noReviews, { backgroundColor: theme.colors.surfaceVariant, borderRadius: theme.borderRadius.lg }]}>
+              <Text style={{ fontSize: 32, marginBottom: 8 }}>📝</Text>
+              <Text style={[styles.noReviewsText, { color: theme.colors.textSecondary }]}>
+                {t('restaurant.noReviews')}
+              </Text>
+              <Text style={[styles.noReviewsSub, { color: theme.colors.textTertiary }]}>
+                {t('restaurant.noReviewsMessage')}
+              </Text>
+            </View>
+          ) : (
+            reviews.slice(0, 3).map((review) => (
+              <View
+                key={review.id}
+                style={[styles.reviewCard, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}
+              >
+                <View style={styles.reviewHeader}>
+                  <View style={styles.reviewUser}>
+                    <View style={[styles.reviewAvatar, { backgroundColor: theme.colors.primary }]}>
+                      <Text style={styles.reviewAvatarText}>
+                        {review.userId.charAt(0).toUpperCase()}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={[styles.reviewUserName, { color: theme.colors.text }]}>
+                        {review.userId}
+                      </Text>
+                      <Text style={[styles.reviewDate, { color: theme.colors.textTertiary }]}>
+                        {getRelativeTime(review.createdAt)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.reviewStars}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Text key={star} style={{ fontSize: 14 }}>
+                        {star <= review.rating ? '⭐' : '☆'}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+                <Text style={[styles.reviewComment, { color: theme.colors.textSecondary }]}>
+                  {review.comment}
+                </Text>
+              </View>
+            ))
+          )}
         </View>
 
         {/* Menu Categories */}
@@ -229,4 +288,18 @@ const styles = StyleSheet.create({
   cartBadgeText: { color: '#FFF', fontWeight: '800', fontSize: 13 },
   cartBarText: { flex: 1, color: '#FFF', fontSize: 16, fontWeight: '700' },
   cartBarPrice: { color: '#FFF', fontSize: 16, fontWeight: '800' },
+  reviewsSection: { marginTop: 20 },
+  reviewsSectionTitle: { fontSize: 18, fontWeight: '800', marginBottom: 12 },
+  noReviews: { padding: 24, alignItems: 'center' },
+  noReviewsText: { fontSize: 15, fontWeight: '600', marginBottom: 4 },
+  noReviewsSub: { fontSize: 13 },
+  reviewCard: { padding: 14, marginBottom: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 1 },
+  reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  reviewUser: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  reviewAvatar: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  reviewAvatarText: { color: '#FFF', fontWeight: '800', fontSize: 16 },
+  reviewUserName: { fontSize: 14, fontWeight: '700' },
+  reviewDate: { fontSize: 11 },
+  reviewStars: { flexDirection: 'row', gap: 1 },
+  reviewComment: { fontSize: 13, lineHeight: 19 },
 });

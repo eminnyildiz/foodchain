@@ -49,7 +49,7 @@ export default function MenuManagementScreen() {
         name: item.name,
         description: item.description,
         price: item.price.toString(),
-        category: item.category
+        category: item.categoryId
       });
     } else {
       setEditingItem(null);
@@ -77,7 +77,7 @@ export default function MenuManagementScreen() {
         description: formData.description,
         price: parseFloat(formData.price) || 0,
         image: 'https://images.unsplash.com/photo-1546069901-ba6ba6183a27?w=800&q=80',
-        category: formData.category || t('common.general'),
+        categoryId: formData.category || t('common.general'),
         isAvailable: true,
       };
       setItems([newItem, ...items]);
@@ -106,7 +106,7 @@ export default function MenuManagementScreen() {
             )}
             <View style={styles.itemInfo}>
               <Text style={[styles.itemName, { color: theme.colors.text }]} numberOfLines={1}>{item.name}</Text>
-              <Text style={[styles.itemCategory, { color: theme.colors.textTertiary }]}>{item.category}</Text>
+              <Text style={[styles.itemCategory, { color: theme.colors.textTertiary }]}>{item.categoryId}</Text>
               <Text style={[styles.itemPrice, { color: theme.colors.primary }]}>{formatPrice(item.price)}</Text>
             </View>
             <View style={styles.itemActions}>

@@ -23,7 +23,7 @@ export default function RestaurantSettingsScreen() {
         {/* Restaurant profile */}
         <View style={[styles.card, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
           <View style={[styles.avatar, { backgroundColor: theme.colors.primary }]}>
-            <Text style={styles.avatarText}>{getInitials(user?.name || 'R')}</Text>
+            <Text style={styles.avatarText}>{getInitials(user?.firstName || 'R')}</Text>
           </View>
           {/* Demo data - in production, fetch from store */}
           <Text style={[styles.restName, { color: theme.colors.text }]}>Kebapçı Mehmet Usta</Text>
