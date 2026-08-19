@@ -26,22 +26,20 @@ interface OrderState {
 
 const generateId = (): string => 's' + Math.random().toString().substring(2, 6);
 
+const TERMINAL_STATUSES: OrderStatus[] = ['delivered', 'cancelled'];
+
 const simulateOrderProgress = (orderId: string, get: () => OrderState) => {
-  setTimeout(() => {
-    get().updateOrderStatus(orderId, 'confirmed');
-  }, 10000);
+  const safeUpdate = (status: OrderStatus) => {
+    const order = get().orders.find((o) => o.id === orderId);
+    if (order && !TERMINAL_STATUSES.includes(order.status)) {
+      get().updateOrderStatus(orderId, status);
+    }
+  };
 
-  setTimeout(() => {
-    get().updateOrderStatus(orderId, 'preparing');
-  }, 30000);
-
-  setTimeout(() => {
-    get().updateOrderStatus(orderId, 'onTheWay');
-  }, 60000);
-
-  setTimeout(() => {
-    get().updateOrderStatus(orderId, 'delivered');
-  }, 120000);
+  setTimeout(() => safeUpdate('confirmed'), 10000);
+  setTimeout(() => safeUpdate('preparing'), 30000);
+  setTimeout(() => safeUpdate('onTheWay'), 60000);
+  setTimeout(() => safeUpdate('delivered'), 120000);
 };
 
 const demoAddress: Address = {

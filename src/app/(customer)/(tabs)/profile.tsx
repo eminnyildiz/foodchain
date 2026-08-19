@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable, Switch, StyleSheet, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
+
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../../hooks/useTheme';
@@ -9,27 +9,19 @@ import { useSettingsStore } from '../../../store/settingsStore';
 import { Button } from '../../../components/ui/Button';
 import { getInitials } from '../../../utils/helpers';
 
-export default function ProfileScreen() {
+const SettingRow = ({
+  icon,
+  label,
+  right,
+  onPress,
+}: {
+  icon: string;
+  label: string;
+  right?: React.ReactNode;
+  onPress?: () => void;
+}) => {
   const theme = useTheme();
-  const router = useRouter();
-  const { t, i18n } = useTranslation();
-  const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
-  const { isDarkMode, toggleDarkMode, language, setLanguage, notificationsEnabled, toggleNotifications } = useSettingsStore();
-
-  const initials = getInitials(`${user?.name || ''} ${user?.surname || ''}`);
-
-  const SettingRow = ({
-    icon,
-    label,
-    right,
-    onPress,
-  }: {
-    icon: string;
-    label: string;
-    right?: React.ReactNode;
-    onPress?: () => void;
-  }) => (
+  return (
     <Pressable
       onPress={onPress}
       style={[styles.settingRow, { borderBottomColor: theme.colors.border }]}
@@ -42,6 +34,16 @@ export default function ProfileScreen() {
       </View>
     </Pressable>
   );
+};
+
+export default function ProfileScreen() {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+  const { isDarkMode, toggleDarkMode, language, setLanguage, notificationsEnabled, toggleNotifications } = useSettingsStore();
+
+  const initials = getInitials(`${user?.name || ''} ${user?.surname || ''}`);
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.background }]}>

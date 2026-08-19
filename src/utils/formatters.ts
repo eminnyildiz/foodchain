@@ -31,7 +31,9 @@ export const getRelativeTime = (date: Date | string): string => {
   const now = new Date();
   const diff = Math.floor((now.getTime() - d.getTime()) / 1000);
 
-  if (diff < 60) {
+  if (diff < 0) {
+    return 'Yakında';
+  } else if (diff < 60) {
     return 'Az önce';
   } else if (diff < 3600) {
     return `${Math.floor(diff / 60)} dk önce`;
@@ -54,7 +56,11 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const validatePhone = (phone: string): boolean => {
-  const digits = phone.replace(/\D/g, '');
+  let digits = phone.replace(/\D/g, '');
+  // Strip Turkish country code if present
+  if (digits.startsWith('90') && digits.length > 11) {
+    digits = digits.substring(2);
+  }
   return (
     digits.length >= 10 &&
     digits.length <= 11 &&

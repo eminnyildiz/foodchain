@@ -2,7 +2,7 @@ import '../i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { Platform } from 'react-native';
+
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
@@ -18,11 +18,13 @@ function RootLayoutNav() {
   const theme = useTheme();
   const router = useRouter();
   const segments = useSegments();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, _hasHydrated } = useAuthStore();
   const isDarkMode = useSettingsStore((s) => s.isDarkMode);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    // Wait for persisted state to rehydrate before running route guards
+    if (!_hasHydrated) return;
+
     const inAuthGroup = segments[0] === '(auth)';
 
     if (!isAuthenticated && !inAuthGroup) {
@@ -34,11 +36,14 @@ function RootLayoutNav() {
         router.replace('/(customer)/(tabs)');
       }
     }
-  }, [isAuthenticated, user?.role]);
+  }, [isAuthenticated, user?.role, segments, router, _hasHydrated]);
 
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    // Only hide splash after hydration completes
+    if (_hasHydrated) {
+      SplashScreen.hideAsync();
+    }
+  }, [_hasHydrated]);
 
   return (
     <>

@@ -6,6 +6,7 @@ import en from './en.json';
 
 const deviceLanguage = getLocales()[0]?.languageCode ?? 'tr';
 
+// eslint-disable-next-line import/no-named-as-default-member
 i18n.use(initReactI18next).init({
   resources: {
     tr: { translation: tr },

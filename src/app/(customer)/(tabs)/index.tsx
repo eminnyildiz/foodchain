@@ -27,7 +27,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
-  const cartCount = useCartStore((s) => s.items.length);
+  const cartCount = useCartStore((s) => s.getItemCount());
 
   const featured = demoRestaurants.slice(0, 5);
 

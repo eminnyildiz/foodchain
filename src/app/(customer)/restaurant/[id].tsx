@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, StyleSheet, Alert, Dimensions, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable, StyleSheet, Alert, Dimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Image } from 'expo-image';
-import AppMap, { MapMarkerProps } from '../../../components/Map';
+import AppMap from '../../../components/Map';
 import { useTheme } from '../../../hooks/useTheme';
 import { useCartStore } from '../../../store/cartStore';
 import { demoRestaurants } from '../../../data/restaurants';

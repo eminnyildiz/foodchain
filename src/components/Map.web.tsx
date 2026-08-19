@@ -21,10 +21,19 @@ const mapContainerStyle = {
 };
 
 export default function AppMap({ markers, style }: MapProps) {
+  const [isMounted, setIsMounted] = React.useState(false);
+  
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
   });
+
+  if (!isMounted) return <View style={[styles.fallback, style]} />;
 
   if (loadError) {
     return (

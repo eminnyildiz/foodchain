@@ -8,6 +8,17 @@ import { demoOrders } from '../../../data/orders';
 import { formatPrice } from '../../../utils/formatters';
 import { Card } from '../../../components/ui/Card';
 
+const StatCard = ({ icon, label, value, color }: { icon: string; label: string; value: string; color: string }) => {
+  const theme = useTheme();
+  return (
+    <View style={[styles.statCard, { backgroundColor: color + '12', borderRadius: theme.borderRadius.lg }]}>
+      <Text style={styles.statIcon}>{icon}</Text>
+      <Text style={[styles.statValue, { color }]}>{value}</Text>
+      <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>{label}</Text>
+    </View>
+  );
+};
+
 export default function DashboardScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -17,13 +28,6 @@ export default function DashboardScreen() {
   const todayRevenue = todayOrders.reduce((sum, o) => sum + o.totalAmount, 0);
   const activeOrders = demoOrders.filter((o) => !['delivered', 'cancelled'].includes(o.status));
 
-  const StatCard = ({ icon, label, value, color }: { icon: string; label: string; value: string; color: string }) => (
-    <View style={[styles.statCard, { backgroundColor: color + '12', borderRadius: theme.borderRadius.lg }]}>
-      <Text style={styles.statIcon}>{icon}</Text>
-      <Text style={[styles.statValue, { color }]}>{value}</Text>
-      <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>{label}</Text>
-    </View>
-  );
 
   // Weekly mock data
   const weekDays = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];

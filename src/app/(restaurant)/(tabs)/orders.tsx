@@ -5,9 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../../hooks/useTheme';
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
-import { demoOrders } from '../../../data/orders';
+import { useOrderStore } from '../../../store/orderStore';
 import { formatPrice } from '../../../utils/formatters';
-import { Order, OrderStatus } from '../../../types';
+import { OrderStatus } from '../../../types';
 
 const statusBadgeVariant: Record<OrderStatus, 'warning' | 'info' | 'primary' | 'success' | 'error'> = {
   pending: 'warning',
@@ -28,7 +28,8 @@ const nextStatus: Record<string, OrderStatus> = {
 export default function RestaurantOrdersScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
-  const [orders, setOrders] = useState<Order[]>(demoOrders);
+  const orders = useOrderStore((s) => s.orders);
+  const updateOrderStatus = useOrderStore((s) => s.updateOrderStatus);
   const [filter, setFilter] = useState<'active' | 'completed'>('active');
 
   const filtered = filter === 'active'
@@ -36,14 +37,10 @@ export default function RestaurantOrdersScreen() {
     : orders.filter((o) => ['delivered', 'cancelled'].includes(o.status));
 
   const handleUpdateStatus = (orderId: string) => {
-    setOrders((prev) =>
-      prev.map((o) => {
-        if (o.id === orderId && nextStatus[o.status]) {
-          return { ...o, status: nextStatus[o.status], updatedAt: new Date().toISOString() };
-        }
-        return o;
-      })
-    );
+    const order = orders.find((o) => o.id === orderId);
+    if (order && nextStatus[order.status]) {
+      updateOrderStatus(orderId, nextStatus[order.status]);
+    }
   };
 
   return (

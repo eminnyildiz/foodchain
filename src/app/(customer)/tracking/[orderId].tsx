@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Pressable, StyleSheet, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { useOrderStore } from '../../../store/orderStore';
 import { demoOrders } from '../../../data/orders';
 import { formatPrice } from '../../../utils/formatters';
 import { OrderStatus } from '../../../types';
-import AppMap, { MapMarkerProps } from '../../../components/Map';
+import AppMap from '../../../components/Map';
 
 const steps: { status: OrderStatus; icon: string; labelKey: string }[] = [
   { status: 'confirmed', icon: '✅', labelKey: 'orderStatus.confirmed' },
@@ -28,10 +28,10 @@ export default function TrackingScreen() {
   const updateStatus = useOrderStore((s) => s.updateOrderStatus);
 
   const order = storeOrders.find((o) => o.id === orderId) || demoOrders.find((o) => o.id === orderId);
-  const [currentStatus, setCurrentStatus] = useState<OrderStatus>(order?.status || 'pending');
+  const currentStatus = order?.status || 'pending';
 
   // Simulate order progression
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (!order || currentStatus === 'delivered' || currentStatus === 'cancelled') return;
 
@@ -47,15 +47,14 @@ export default function TrackingScreen() {
       const currentIdx = statusOrder.indexOf(currentStatus);
       if (currentIdx < statusOrder.length - 1) {
         const nextStatus = statusOrder[currentIdx + 1];
-        setCurrentStatus(nextStatus);
-        if (order && storeOrders.find((o) => o.id === orderId)) {
+        if (storeOrders.find((o) => o.id === orderId)) {
           updateStatus(orderId!, nextStatus);
         }
       }
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [currentStatus]);
+  }, [currentStatus, order, orderId, storeOrders, updateStatus]);
 
   if (!order) {
     return (

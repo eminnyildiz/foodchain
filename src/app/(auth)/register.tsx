@@ -17,6 +17,25 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { UserRole } from '../../types';
 
+const RoleCard = ({ r, icon, label, isActive, onPress, theme }: { r: UserRole; icon: string; label: string; isActive: boolean; onPress: () => void; theme: any }) => (
+  <Pressable
+    onPress={onPress}
+    style={[
+      styles.roleCard,
+      {
+        backgroundColor: isActive ? theme.colors.primary + '15' : theme.colors.surface,
+        borderColor: isActive ? theme.colors.primary : theme.colors.border,
+        borderRadius: theme.borderRadius.lg,
+      },
+    ]}
+  >
+    <Text style={styles.roleIcon}>{icon}</Text>
+    <Text style={[styles.roleLabel, { color: isActive ? theme.colors.primary : theme.colors.text }]}>
+      {label}
+    </Text>
+  </Pressable>
+);
+
 export default function RegisterScreen() {
   const theme = useTheme();
   const router = useRouter();
@@ -54,25 +73,6 @@ export default function RegisterScreen() {
     }
   };
 
-  const RoleCard = ({ r, icon, label }: { r: UserRole; icon: string; label: string }) => (
-    <Pressable
-      onPress={() => setRole(r)}
-      style={[
-        styles.roleCard,
-        {
-          backgroundColor: role === r ? theme.colors.primary + '15' : theme.colors.surface,
-          borderColor: role === r ? theme.colors.primary : theme.colors.border,
-          borderRadius: theme.borderRadius.lg,
-        },
-      ]}
-    >
-      <Text style={styles.roleIcon}>{icon}</Text>
-      <Text style={[styles.roleLabel, { color: role === r ? theme.colors.primary : theme.colors.text }]}>
-        {label}
-      </Text>
-    </Pressable>
-  );
-
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: theme.colors.background }]}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.flex}>
@@ -92,8 +92,8 @@ export default function RegisterScreen() {
 
           {/* Role Selector */}
           <View style={styles.roleRow}>
-            <RoleCard r="customer" icon="🛒" label={t('auth.customer')} />
-            <RoleCard r="restaurant" icon="🏪" label={t('auth.restaurantOwner')} />
+            <RoleCard r="customer" icon="🛒" label={t('auth.customer')} isActive={role === 'customer'} onPress={() => setRole('customer')} theme={theme} />
+            <RoleCard r="restaurant" icon="🏪" label={t('auth.restaurantOwner')} isActive={role === 'restaurant'} onPress={() => setRole('restaurant')} theme={theme} />
           </View>
 
           {/* Form */}
