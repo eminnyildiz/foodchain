@@ -1,7 +1,7 @@
 {
   "name": "foodchain",
   "main": "expo-router/entry",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "dependencies": {
     "@expo/ui": "~57.0.4",
     "@react-google-maps/api": "^2.20.8",
