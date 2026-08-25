@@ -4,7 +4,16 @@ import { getLocales } from 'expo-localization';
 import tr from './tr.json';
 import en from './en.json';
 
-const deviceLanguage = getLocales()[0]?.languageCode ?? 'tr';
+const getDeviceLanguage = (): string => {
+  try {
+    if (typeof window === 'undefined') return 'tr';
+    return getLocales()[0]?.languageCode ?? 'tr';
+  } catch {
+    return 'tr';
+  }
+};
+
+const deviceLanguage = getDeviceLanguage();
 
 // eslint-disable-next-line import/no-named-as-default-member
 i18n.use(initReactI18next).init({

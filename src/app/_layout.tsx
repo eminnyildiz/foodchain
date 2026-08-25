@@ -10,7 +10,9 @@ import { useSettingsStore } from '../store/settingsStore';
 import { useTheme } from '../hooks/useTheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-SplashScreen.preventAutoHideAsync();
+if (typeof window !== 'undefined') {
+  SplashScreen.preventAutoHideAsync();
+}
 
 const queryClient = new QueryClient();
 

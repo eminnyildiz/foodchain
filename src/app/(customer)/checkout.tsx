@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, ScrollView, Pressable, StyleSheet, Modal } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withSequence,
+  withDelay,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,6 +35,40 @@ export default function CheckoutScreen() {
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const [orderId, setOrderId] = useState('');
+
+  // Celebration animation values
+  const celebrationScale = useSharedValue(0);
+  const celebrationOpacity = useSharedValue(0);
+  const celebrationRotate = useSharedValue(0);
+
+  useEffect(() => {
+    if (success) {
+      // Reset then animate
+      celebrationScale.value = 0;
+      celebrationOpacity.value = 0;
+      celebrationRotate.value = -15;
+
+      celebrationOpacity.value = withTiming(1, { duration: 300 });
+      celebrationScale.value = withSequence(
+        withSpring(1.3, { damping: 4, stiffness: 200 }),
+        withSpring(1, { damping: 8, stiffness: 150 }),
+      );
+      celebrationRotate.value = withSequence(
+        withTiming(10, { duration: 150 }),
+        withTiming(-10, { duration: 150 }),
+        withTiming(5, { duration: 100 }),
+        withTiming(0, { duration: 100 }),
+      );
+    }
+  }, [success]);
+
+  const celebrationStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: celebrationScale.value },
+      { rotate: `${celebrationRotate.value}deg` },
+    ],
+    opacity: celebrationOpacity.value,
+  }));
 
   const subtotal = cart.items.reduce((sum, i) => sum + i.menuItem.price * i.quantity, 0);
   const deliveryFee = subtotal >= 150 ? 0 : subtotal >= 100 ? 5 : 10;
@@ -174,7 +217,7 @@ export default function CheckoutScreen() {
       <Modal visible={success} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.xl }]}>
-            <Text style={styles.successIcon}>🎉</Text>
+            <Animated.Text style={[styles.successIcon, celebrationStyle]}>🎉</Animated.Text>
             <Text style={[styles.successTitle, { color: theme.colors.text }]}>{t('checkout.orderPlaced')}</Text>
             <Text style={[styles.successMsg, { color: theme.colors.textSecondary }]}>{t('checkout.orderPlacedMessage')}</Text>
             <Button

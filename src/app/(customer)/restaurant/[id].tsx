@@ -14,7 +14,7 @@ import { formatPrice, formatDeliveryTime, getRelativeTime } from '../../../utils
 import { Badge } from '../../../components/ui/Badge';
 import { MenuItem } from '../../../types';
 
-const { width } = Dimensions.get('window');
+const { width } = typeof window !== 'undefined' ? Dimensions.get('window') : { width: 375 };
 
 export default function RestaurantDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { validateEmail, validatePhone } from '../../utils/formatters';
 import {
   View,
   Text,
@@ -54,7 +55,10 @@ export default function RegisterScreen() {
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name) e.name = t('validation.required');
+    if (!surname) e.surname = t('validation.required');
     if (!email) e.email = t('validation.required');
+    else if (!validateEmail(email)) e.email = t('validation.invalidEmail');
+    if (phone && !validatePhone(phone)) e.phone = t('validation.invalidPhone');
     if (!password) e.password = t('validation.required');
     if (password.length > 0 && password.length < 6) e.password = t('validation.passwordTooShort');
     if (password !== confirmPassword) e.confirmPassword = t('validation.passwordsDontMatch');
@@ -102,7 +106,7 @@ export default function RegisterScreen() {
               <Input label={t('auth.name')} value={name} onChangeText={setName} error={errors.name} />
             </View>
             <View style={styles.nameField}>
-              <Input label={t('auth.surname')} value={surname} onChangeText={setSurname} />
+              <Input label={t('auth.surname')} value={surname} onChangeText={setSurname} error={errors.surname} />
             </View>
           </View>
 
@@ -123,6 +127,7 @@ export default function RegisterScreen() {
             onChangeText={setPhone}
             placeholder="0555 123 4567"
             keyboardType="phone-pad"
+            error={errors.phone}
           />
           <Input
             label={t('auth.password')}

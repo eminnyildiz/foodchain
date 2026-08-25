@@ -12,6 +12,7 @@ import { Badge } from '../../../components/ui/Badge';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { formatPrice } from '../../../utils/formatters';
 import { demoOrders } from '../../../data/orders';
+import { demoRestaurants } from '../../../data/restaurants';
 import { Order, OrderStatus } from '../../../types';
 
 const statusBadgeVariant: Record<OrderStatus, 'warning' | 'info' | 'primary' | 'success' | 'error'> = {
@@ -67,7 +68,9 @@ export default function OrdersScreen() {
     Alert.alert(t('restaurant.reviewSubmitted'), t('restaurant.reviewSubmittedMessage'));
   };
 
-  const renderOrder = (order: Order) => (
+  const renderOrder = (order: Order) => {
+    const restaurant = demoRestaurants.find((r) => r.id === order.restaurantId);
+    return (
     <Pressable
       key={order.id}
       onPress={() => router.push(`/(customer)/tracking/${order.id}`)}
@@ -76,8 +79,16 @@ export default function OrdersScreen() {
         { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg },
       ]}
     >
+      {restaurant?.coverImage && (
+        <Image
+          source={{ uri: restaurant.coverImage }}
+          style={[styles.orderImage, { borderRadius: theme.borderRadius.md }]}
+        />
+      )}
       <View style={styles.orderInfo}>
-        <Text style={[styles.orderName, { color: theme.colors.text }]}>#{order.id}</Text>
+        <Text style={[styles.orderName, { color: theme.colors.text }]}>
+          {restaurant?.name || `#${order.id}`}
+        </Text>
         <Text style={[styles.orderMeta, { color: theme.colors.textTertiary }]}>
           {order.items.length} {t('cart.itemCount')} • {formatPrice(order.total)}
         </Text>
@@ -97,7 +108,8 @@ export default function OrdersScreen() {
         )}
       </View>
     </Pressable>
-  );
+    );
+  };
 
   if (allOrders.length === 0) {
     return (
@@ -229,6 +241,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '800', marginBottom: 20 },
   sectionTitle: { fontSize: 16, fontWeight: '700', marginBottom: 12 },
   orderCard: { flexDirection: 'row', padding: 12, marginBottom: 12, alignItems: 'center', gap: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3, elevation: 2 },
+  orderImage: { width: 56, height: 56 },
   orderInfo: { flex: 1 },
   orderName: { fontSize: 14, fontWeight: '700', marginBottom: 2 },
   orderMeta: { fontSize: 12, marginBottom: 2 },

@@ -20,7 +20,7 @@ import { categories } from '../../../data/categories';
 import { formatPrice, formatDeliveryTime } from '../../../utils/formatters';
 import { getGreeting } from '../../../utils/helpers';
 
-const { width } = Dimensions.get('window');
+const { width } = typeof window !== 'undefined' ? Dimensions.get('window') : { width: 375 };
 
 export default function HomeScreen() {
   const theme = useTheme();
