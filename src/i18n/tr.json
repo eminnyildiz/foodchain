@@ -216,5 +216,41 @@
     "passwordTooShort": "Şifre en az 6 karakter olmalıdır",
     "passwordsDontMatch": "Şifreler eşleşmiyor",
     "invalidPhone": "Geçerli bir telefon numarası girin"
+  },
+  "addresses": {
+    "noAddresses": "Adres Yok",
+    "noAddressesMessage": "İlk teslimat adresinizi ekleyin",
+    "deleteConfirm": "Bu adresi silmek istediğinizden emin misiniz?",
+    "cannotDeleteDefault": "Varsayılan adres silinemez. Önce başka bir adresi varsayılan olarak ayarlayın.",
+    "setDefault": "Varsayılan Yap",
+    "editAddress": "Adresi Düzenle",
+    "addressTitle": "Adres Başlığı",
+    "addressTitlePlaceholder": "ör. Ev, İş, Ofis",
+    "street": "Sokak / Tam Adres",
+    "streetPlaceholder": "Tam sokak adresinizi girin",
+    "city": "Şehir",
+    "cityPlaceholder": "ör. İstanbul",
+    "district": "İlçe",
+    "districtPlaceholder": "ör. Kadıköy",
+    "postalCode": "Posta Kodu",
+    "locationOnMap": "Haritada Konum",
+    "mapPlaceholder": "Koordinatları girin veya haritadan seçin",
+    "latitude": "Enlem",
+    "longitude": "Boylam",
+    "invalidCoordinate": "Geçersiz koordinat",
+    "setAsDefault": "Varsayılan teslimat adresi olarak ayarla",
+    "addressSaved": "Adres başarıyla kaydedildi"
+  },
+  "settings": {
+    "changePassword": "Şifre Değiştir",
+    "currentPassword": "Mevcut Şifre",
+    "newPassword": "Yeni Şifre",
+    "confirmNewPassword": "Yeni Şifre Tekrar",
+    "passwordChanged": "Şifre Değiştirildi",
+    "passwordChangedMessage": "Şifreniz başarıyla değiştirildi",
+    "passwordChangeError": "Şifre değiştirme başarısız. Lütfen mevcut şifrenizi kontrol edin.",
+    "account": "Hesap",
+    "preferences": "Tercihler",
+    "about": "Hakkında"
   }
 }

@@ -216,5 +216,41 @@
     "passwordTooShort": "Password must be at least 6 characters",
     "passwordsDontMatch": "Passwords don't match",
     "invalidPhone": "Enter a valid phone number"
+  },
+  "addresses": {
+    "noAddresses": "No Addresses",
+    "noAddressesMessage": "Add your first delivery address",
+    "deleteConfirm": "Are you sure you want to delete this address?",
+    "cannotDeleteDefault": "Cannot delete the default address. Set another address as default first.",
+    "setDefault": "Set Default",
+    "editAddress": "Edit Address",
+    "addressTitle": "Address Title",
+    "addressTitlePlaceholder": "e.g. Home, Work, Office",
+    "street": "Street / Full Address",
+    "streetPlaceholder": "Enter your full street address",
+    "city": "City",
+    "cityPlaceholder": "e.g. Istanbul",
+    "district": "District",
+    "districtPlaceholder": "e.g. Kadıköy",
+    "postalCode": "Postal Code",
+    "locationOnMap": "Location on Map",
+    "mapPlaceholder": "Enter coordinates or pick on map",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "invalidCoordinate": "Invalid coordinate",
+    "setAsDefault": "Set as default delivery address",
+    "addressSaved": "Address saved successfully"
+  },
+  "settings": {
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordChanged": "Password Changed",
+    "passwordChangedMessage": "Your password has been changed successfully",
+    "passwordChangeError": "Password change failed. Please check your current password.",
+    "account": "Account",
+    "preferences": "Preferences",
+    "about": "About"
   }
 }

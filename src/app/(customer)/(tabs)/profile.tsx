@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, Pressable, Switch, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Switch, StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../../hooks/useTheme';
 import { useAuthStore } from '../../../store/authStore';
@@ -38,6 +39,7 @@ const SettingRow = ({
 
 export default function ProfileScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
@@ -63,7 +65,7 @@ export default function ProfileScreen() {
 
         {/* Settings */}
         <View style={[styles.settingsCard, { backgroundColor: theme.colors.surface, borderRadius: theme.borderRadius.lg }]}>
-          <SettingRow icon="📍" label={t('profile.myAddresses')} onPress={() => Alert.alert(t('common.info'), t('common.comingSoon'))} />
+          <SettingRow icon="📍" label={t('profile.myAddresses')} onPress={() => router.push('/(customer)/addresses')} />
           <SettingRow
             icon="🌐"
             label={t('profile.language')}
@@ -102,7 +104,7 @@ export default function ProfileScreen() {
               />
             }
           />
-          <SettingRow icon="ℹ️" label={t('profile.settings')} onPress={() => Alert.alert(t('common.info'), t('common.comingSoon'))} />
+          <SettingRow icon="ℹ️" label={t('profile.settings')} onPress={() => router.push('/(customer)/settings')} />
         </View>
 
         <View style={{ marginTop: 24 }}>

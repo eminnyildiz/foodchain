@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createSSRSafeStorage } from './ssrStorage';
-import { User } from '../types';
+import { User, Address } from '../types';
 
 interface AuthState {
   user: User | null;
@@ -19,6 +19,11 @@ interface AuthState {
   logout: () => void;
   updateProfile: (data: Partial<User>) => void;
   setUser: (user: User | null) => void;
+  addAddress: (address: Address) => void;
+  removeAddress: (addressId: string) => void;
+  updateAddress: (addressId: string, data: Address) => void;
+  setDefaultAddress: (addressId: string) => void;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
 }
 
 const generateId = (): string => Math.random().toString(36).substring(2, 10);
@@ -151,6 +156,77 @@ export const useAuthStore = create<AuthState>()(
 
       setUser: (user: User | null) => {
         set({ user, isAuthenticated: !!user });
+      },
+
+      addAddress: (address: Address) => {
+        set((state) => {
+          if (!state.user) return state;
+          const addresses = [...state.user.addresses, address];
+          // If this is the first address or marked default, ensure only one default
+          if (address.isDefault || addresses.length === 1) {
+            return {
+              user: {
+                ...state.user,
+                addresses: addresses.map((a) => ({
+                  ...a,
+                  isDefault: a.id === address.id,
+                })),
+              },
+            };
+          }
+          return { user: { ...state.user, addresses } };
+        });
+      },
+
+      removeAddress: (addressId: string) => {
+        set((state) => {
+          if (!state.user) return state;
+          const filtered = state.user.addresses.filter((a) => a.id !== addressId);
+          // If we removed the default and there are remaining, promote the first
+          if (filtered.length > 0 && !filtered.some((a) => a.isDefault)) {
+            filtered[0].isDefault = true;
+          }
+          return { user: { ...state.user, addresses: filtered } };
+        });
+      },
+
+      updateAddress: (addressId: string, data: Address) => {
+        set((state) => {
+          if (!state.user) return state;
+          let addresses = state.user.addresses.map((a) =>
+            a.id === addressId ? { ...data, id: addressId } : a,
+          );
+          // If updated address is now default, unset others
+          if (data.isDefault) {
+            addresses = addresses.map((a) => ({
+              ...a,
+              isDefault: a.id === addressId,
+            }));
+          }
+          return { user: { ...state.user, addresses } };
+        });
+      },
+
+      setDefaultAddress: (addressId: string) => {
+        set((state) => {
+          if (!state.user) return state;
+          return {
+            user: {
+              ...state.user,
+              addresses: state.user.addresses.map((a) => ({
+                ...a,
+                isDefault: a.id === addressId,
+              })),
+            },
+          };
+        });
+      },
+
+      changePassword: async (_currentPassword: string, _newPassword: string): Promise<boolean> => {
+        // Simulated password change — in production this calls an API
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Demo: always succeeds
+        return true;
       },
     }),
     {
