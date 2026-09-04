@@ -1,10 +1,10 @@
-# 🍔 FoodChain — Food Delivery Application (v1.0.0 MVP)
+# 🍔 FoodChain — Food Delivery Application
 
 FoodChain is a modern, cross-platform (iOS, Android, Web) food delivery application built using React Native and Expo SDK 57. It provides separate, dedicated user interfaces and portals for both customers and restaurant managers. The system architecture, data models, and feature sets have been designed and implemented in 100% compliance with the Software Design Document (SDD) requirements.
 
 ---
 
-## 📱 Key Features (MVP)
+## 📱 Key Features
 
 ### 🛒 Customer Panel
 - **Authentication & Registration:**

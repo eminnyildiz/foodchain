@@ -1,10 +1,10 @@
-# 🍔 FoodChain — Yemek Sipariş Uygulaması (v1.0.0 MVP)
+# 🍔 FoodChain — Yemek Sipariş Uygulaması
 
 FoodChain, React Native ve Expo SDK 57 kullanılarak geliştirilmiş, modern ve cross-platform (iOS, Android, Web) bir yemek sipariş uygulamasıdır. Hem müşteriler hem de restoran yöneticileri için ayrı kullanıcı arayüzleri ve paneller sunar. Projenin mimarisi, veri modelleri ve özellikleri Yazılım Tasarım Dokümanı (Software Design Document - SDD) gereksinimlerine %100 uyumlu şekilde tasarlanıp tamamlanmıştır.
 
 ---
 
-## 📱 Temel Özellikler (MVP)
+## 📱 Temel Özellikler
 
 ### 🛒 Müşteri Paneli
 - **Giriş ve Kayıt (Authentication):**
