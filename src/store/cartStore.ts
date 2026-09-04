@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persist } from 'zustand/middleware';
+import { createSSRSafeStorage } from './ssrStorage';
 import { CartItem, MenuItem } from '../types';
 
 interface CartState {
@@ -132,7 +132,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'foodchain-cart',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createSSRSafeStorage(),
       partialize: (state) => ({
         items: state.items,
         restaurantId: state.restaurantId,

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persist } from 'zustand/middleware';
+import { createSSRSafeStorage } from './ssrStorage';
 import { User } from '../types';
 
 interface AuthState {
@@ -155,7 +155,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'foodchain-auth',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createSSRSafeStorage(),
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
